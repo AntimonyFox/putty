@@ -10,7 +10,7 @@ int main()
     while(true)
     {
         cout << "> ";
-        cin >> uInput;
+        getline(cin, uInput);
         ChatParser::Parse(uInput);
     }
 
