@@ -7,6 +7,8 @@ int main()
 {
     string uInput;
 
+    ChatParser::Init();
+
     while(true)
     {
         cout << "> ";

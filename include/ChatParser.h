@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <map>
 
 using namespace std;
 
@@ -15,80 +16,82 @@ class ChatParser
 {
     public:
         vector<string> static Parse(string parseMe);
-        void Look();
-        void Inventory();
-        void TakeAll();
-        void DropAll();
-        void ExamineAll();
 
-        bool Throw(tempObj * throwMe, tempObj * hitMe);
-        bool Move(string dir);
-        bool Use(tempObj * useMe);
-        bool Use(tempObj * useMe, tempObj * onMe);
-        bool Drop(tempObj * dropMe);
-        bool Take(tempObj * takeMe);
-        bool Open(tempObj * openMe);
-        bool Read(tempObj * readMe);
-        bool Put(tempObj * putMe, tempObj * fillMe);
-        bool Drink(tempObj * drinkMe);
-        bool Turn(tempObj * turnMe, bool on);
-        bool MoveObj(tempObj * moveMe);
-        bool Attack(tempObj * attackMe, tempObj * attackWithMe);
-        bool Examine(tempObj * examineMe);
-        bool Eat(tempObj * eatMe);
-        bool Close(tempObj * closeMe);
-        bool Tie(tempObj * tieMe, tempObj * toMe);
-        bool Break(tempObj * breakMe, tempObj * withMe);
-        bool Jump();
-        bool Pray();
-        bool Diagnose();
-        bool Shout();
-        bool Destroy(tempObj * destroyMe);
-        bool Swap(tempObj * swapMe, tempObj * withMe);
-        bool LookAt(tempObj * lookAtMe);
-        bool Save(int state);
-        bool Restore(int state);
+        static void Init();
+
+        static void Look();
+        static void Inventory();
+        static void TakeAll();
+        static void DropAll();
+        static void ExamineAll();
+
+        static bool Throw(tempObj * throwMe, tempObj * hitMe);
+        static bool Move(string dir);
+        static bool Use(tempObj * useMe);
+        static bool Use(tempObj * useMe, tempObj * onMe);
+        static bool Drop(tempObj * dropMe);
+        static bool Take(tempObj * takeMe);
+        static bool Open(tempObj * openMe);
+        static bool Read(tempObj * readMe);
+        static bool Put(tempObj * putMe, tempObj * fillMe);
+        static bool Drink(tempObj * drinkMe);
+        static bool Turn(tempObj * turnMe, bool on);
+        static bool MoveObj(tempObj * moveMe);
+        static bool Attack(tempObj * attackMe, tempObj * attackWithMe);
+        static bool Examine(tempObj * examineMe);
+        static bool Eat(tempObj * eatMe);
+        static bool Close(tempObj * closeMe);
+        static bool Tie(tempObj * tieMe, tempObj * toMe);
+        static bool Break(tempObj * breakMe, tempObj * withMe);
+        static bool Jump();
+        static bool Pray();
+        static bool Diagnose();
+        static bool Shout();
+        static bool Destroy(tempObj * destroyMe);
+        static bool Swap(tempObj * swapMe, tempObj * withMe);
+        static bool LookAt(tempObj * lookAtMe);
+        static bool Save(int state);
+        static bool Restore(int state);
         weak_ptr<int> currentRoom;
 
-    protected:
-    private:
-        static const string lookAlias[] = {"look", "l", "description"};
-        static const string inventoryAlias[] = {};
+        static string lookAlias[3];
+        static string inventoryAlias[3];
 
-        static const string moveAlias[] = {"go", "walk", "run"};
-        static const string northAlias[] = {"north", "n"};
-        static const string eastAlias[] = {"east", "e"};
-        static const string soutAlias[] = {"south", "s"};
-        static const string westAlias[] = {"west",};
-        static const string northEastAlias[] = {"northeast", "ne"};
-        static const string northWestAlias[] = {"northwest", "nw"};
-        static const string southEastAlias[] = {"southeast", "se"};
-        static const string southWestAlias[] = {"soutwest", "sw"};
-        static const string upAlias[] = {"up"};
-        static const string downAlias[] = {"down"};
+        static string moveAlias[3];
+        static string northAlias[2];
+        static string eastAlias[2];
+        static string southAlias[2];
+        static string westAlias[2];
+        static string northEastAlias[2];
+        static string northWestAlias[2];
+        static string southEastAlias[2];
+        static string southWestAlias[2];
+        static string upAlias[1];
+        static string downAlias[1];
+        static string throwAlias[2];
+        static string useAlias[2];
+        static string dropAlias[3];
+        static string takeAlias[4];
+        static string openAlias[2];
+        static string readAlias[1];
+        static string putAlias[3];
+        static string drinkAlias[2];
+        static string turnAlias[2];
+        static string moveObjAlias[2];
+        static string attackAlias[4];
+        static string examineAlias[2];
+        static string eatAlias[2];
+        static string closeAlias[2];
+        static string tieAlias[4];
+        static string breakAlias[2];
+        static string jumpAlias[2];
+        static string prayAlias[1];
+        static string shoutAlias[3];
+        static string diagnoseAlias[2];
+        static string saveAlias[1];
+        static string restoreAlias[2];
 
-        static const string throwAlias[] = {"throw", "toss"};
-        static const string useAlias[] = {"use", "u"};
-        static const string dropAlias[] = {"drop", "unhand", "d"};
-        static const string takeAlias[] = {"take", "get", "grab", "t"};
-        static const string openAlias[] = {"open", "o"};
-        static const string readAlias[] = {"read"};
-        static const string putAlias[] = {"put", "place", "set"};
-        static const string drinkAlias[] = {"drink", "swallow"};
-        static const string turnAlias[] = {"turn", "switch"};
-        static const string moveObjAlias[] = {"move", "push"};
-        static const string attackAlias[] = {"attack", "kill", "sick", "swing at"};
-        static const string examineAlias[] = {"examine", "look at"};
-        static const string eatAlias[] = {"eat", "consume"};
-        static const string closeAlias[] = {"close", "c"};
-        static const string tieAlias[] = {"tie", "fasten", "attach", "join"};
-        static const string breakAlias[] = {"break", "destroy"};
-        static const string jumpAlias[] = {"jump", "hop"};
-        static const string prayAlias[] = {"pray"};
-        static const string shoutAlias[] = {"shout", "yell", "bark"};
-        static const string diagnoseAlias[] = {"diagnose", "health"};
-        static const string saveAlias[] = {"save"};
-        static const string restoreAlias[] = {"restore", "load"};
+        static map<string, string> aliasMap;
 
 };
 
