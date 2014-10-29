@@ -1,25 +1,28 @@
 #ifndef INVENTORY_H
 #define INVENTORY_H
-
-include <unordered_map>
+#include <string>
+#include <iostream>
+#include <map>
 using namespace::std;
 
-struct hashValue{
+struct hashValue
+{
     int itemQuantity;
-    string itemQuantiy;
+    //object toBeEntity;
 };
 
-template <string key, hashValue> hashTable;
-
-
+typedef map<string, hashValue> InventoryTable;
+//map <string key, hashValue h> inventory;
 class Inventory
 {
-    public:
-        Inventory();
-        virtual ~Inventory();
-    protected:
-    private:
-        void add()
-};
+private:
+    string itemName;
+public:
+    void add(InventoryTable *inventory, string itemName, int itemQuantity);
+    void remove(InventoryTable *inventory, string itemName, int itemQuantity);
+    void printInventory(InventoryTable *inventory);
+    void useItem(InventoryTable *inventory, string itemName);
+    InventoryTable* createInventory();
 
+};
 #endif // INVENTORY_H
