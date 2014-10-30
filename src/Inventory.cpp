@@ -10,7 +10,7 @@ void Inventory::add(InventoryTable *inventory, string itemName, int itemQuantity
         }
 
     if (add == true)
-        inventory->emplace(itemName, itemQuantity);
+        (*inventory)[itemName] = hashValue {itemQuantity};
 }
 
 void Inventory::remove(InventoryTable *inventory, string itemName, int itemQuantity){
@@ -36,7 +36,6 @@ void Inventory::useItem(InventoryTable *inventory, string itemName){
 
 InventoryTable *Inventory::createInventory()
 {
-    //InventoryTable *inventoryTable = new InventoryTable();
-    //return *inventoryTable;
-    return nullptr;
+    InventoryTable *inventoryTable = new InventoryTable();
+    return inventoryTable;
 }
