@@ -9,7 +9,12 @@
 using namespace std;
 
 class tempObj{};
-class tempRoom{};
+class tempRoom
+{
+    public:
+        vector<tempObj> objectList;
+        tempObj getObject(string name);
+};
 
 
 class ChatParser
@@ -18,6 +23,8 @@ class ChatParser
         vector<string> static Parse(string parseMe);
 
         static void Init();
+        static void ChatError();
+        static void NoText();
 
         static void Look();
         static void Inventory();
@@ -25,31 +32,31 @@ class ChatParser
         static void DropAll();
         static void ExamineAll();
 
-        static bool Throw(tempObj * throwMe, tempObj * hitMe);
+        static bool Throw(string throwMe, string hitMe);
         static bool Move(string dir);
-        static bool Use(tempObj * useMe);
-        static bool Use(tempObj * useMe, tempObj * onMe);
-        static bool Drop(tempObj * dropMe);
-        static bool Take(tempObj * takeMe);
-        static bool Open(tempObj * openMe);
-        static bool Read(tempObj * readMe);
-        static bool Put(tempObj * putMe, tempObj * fillMe);
-        static bool Drink(tempObj * drinkMe);
-        static bool Turn(tempObj * turnMe, bool on);
-        static bool MoveObj(tempObj * moveMe);
-        static bool Attack(tempObj * attackMe, tempObj * attackWithMe);
-        static bool Examine(tempObj * examineMe);
-        static bool Eat(tempObj * eatMe);
-        static bool Close(tempObj * closeMe);
-        static bool Tie(tempObj * tieMe, tempObj * toMe);
-        static bool Break(tempObj * breakMe, tempObj * withMe);
+        static bool Use(string useMe);
+        static bool Use(string useMe, string onMe);
+        static bool Drop(string dropMe);
+        static bool Take(string takeMe);
+        static bool Open(string openMe);
+        static bool Read(string readMe);
+        static bool Put(string putMe, string fillMe);
+        static bool Drink(string drinkMe);
+        static bool Turn(string turnMe, bool on);
+        static bool MoveObj(string moveMe);
+        static bool Attack(string attackMe, string attackWithMe);
+        static bool Examine(string examineMe);
+        static bool Eat(string eatMe);
+        static bool Close(string closeMe);
+        static bool Tie(string tieMe, string toMe);
+        static bool Break(string breakMe, string withMe);
         static bool Jump();
         static bool Pray();
         static bool Diagnose();
         static bool Shout();
-        static bool Destroy(tempObj * destroyMe);
-        static bool Swap(tempObj * swapMe, tempObj * withMe);
-        static bool LookAt(tempObj * lookAtMe);
+        static bool Destroy(string destroyMe);
+        static bool Swap(string swapMe, string withMe);
+        static bool LookAt(string lookAtMe);
         static bool Save(int state);
         static bool Restore(int state);
         weak_ptr<int> currentRoom;
@@ -92,7 +99,6 @@ class ChatParser
         static string restoreAlias[2];
 
         static map<string, string> aliasMap;
-
 };
 
 #endif // CHATPARSER_H

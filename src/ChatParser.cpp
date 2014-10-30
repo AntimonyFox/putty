@@ -50,10 +50,10 @@ void ChatParser::Init()
     ADDARRAY("east", eastAlias);
     ADDARRAY("south", southAlias);
     ADDARRAY("west", westAlias);
-    ADDARRAY("northEast", northEastAlias);
-    ADDARRAY("northWest", northWestAlias);
-    ADDARRAY("southEast", southEastAlias);
-    ADDARRAY("southWest", southWestAlias);
+    ADDARRAY("northeast", northEastAlias);
+    ADDARRAY("northwest", northWestAlias);
+    ADDARRAY("southeast", southEastAlias);
+    ADDARRAY("southwest", southWestAlias);
     ADDARRAY("up", upAlias);
     ADDARRAY("down", downAlias);
     ADDARRAY("throw", throwAlias);
@@ -65,7 +65,7 @@ void ChatParser::Init()
     ADDARRAY("put", putAlias);
     ADDARRAY("drink", drinkAlias);
     ADDARRAY("turn", turnAlias);
-    ADDARRAY("moveObj", moveObjAlias);
+    ADDARRAY("moveobj", moveObjAlias);
     ADDARRAY("attack", attackAlias);
     ADDARRAY("eat", eatAlias);
     ADDARRAY("close", closeAlias);
@@ -91,6 +91,34 @@ string ToLower(string lowerMe)
     }
 
     return lowerMe;
+}
+
+string Capitalize(string capMe)
+{
+    if(capMe[0] >= 97 && capMe[0] <= 122)
+    {
+        capMe[0] -= 32;
+    }
+
+    for(unsigned int i = 1 ; i < capMe.length() ; ++i)
+    {
+        if(capMe[i] >= 65 && capMe[i] <= 90)
+        {
+            capMe[i] += 32;
+        }
+    }
+
+    return capMe;
+}
+
+void ChatParser::ChatError()
+{
+    cout << "I don't understand what you are saying." << endl;
+}
+
+void ChatParser::NoText()
+{
+    cout << "You havent typed anything." << endl;
 }
 
 void removeThe(vector<string> * purgeMe)
@@ -132,10 +160,361 @@ vector<string> ChatParser::Parse(string parseMe)
         }
     }
 
-    removeThe(arguments);
+    if(arguments->size() > 0)
+    {
+        string al = aliasMap[ToLower((*arguments)[0])];
 
-    cout << aliasMap[(*arguments)[0]] << endl;
+        if(al == "")
+        {
+            ChatError();
+        }
+        else
+        {
+            removeThe(arguments);
+            if(al == "look")
+            {
+                if(arguments->size() > 2)
+                {
+                    if((*arguments)[1] == "at")
+                    {
+                        Examine((*arguments)[2]);
+                    }
+                    else
+                    {
+                        Look();
+                    }
+                }
+                else
+                {
+                    Look();
+                }
+            }
+            else if(al == "inventory")
+            {
+                Inventory();
+            }
+            else if(al == "move")
+            {
+                if(arguments->size() == 1)
+                {
+                    cout << Capitalize((*arguments)[0]) << " in what direction?" << endl;
+                }
+                else
+                {
+                    Move((*arguments)[1]);
+                }
+            }
+            else if(al == "north")
+            {
+                Move(al);
+            }
+            else if(al == "south")
+            {
+                Move(al);
+            }
+            else if(al == "west")
+            {
+                Move(al);
+            }
+            else if(al == "east")
+            {
+                Move(al);
+            }
+            else if(al == "northeast")
+            {
+                Move(al);
+            }
+            else if(al == "northwest")
+            {
+                Move(al);
+            }
+            else if(al == "southeast")
+            {
+                Move(al);
+            }
+            else if(al == "southwest")
+            {
+                Move(al);
+            }
+            else if(al == "up")
+            {
+                Move(al);
+            }
+            else if(al == "down")
+            {
+                Move(al);
+            }
+            else if(al == "use")
+            {
+                if(arguments->size() > 1)
+                {
+                    Use((*arguments)[1]);
+                }
+                else if(arguments->size() > 3 && (*arguments)[2]=="on")
+                {
+                    Use((*arguments)[1], (*arguments)[3]);
+                }
+                else
+                {
+                    cout << "Use what?" << endl;
+                }
+            }
+            else if(al == "drop")
+            {
+                if(arguments->size() > 1)
+                {
+                    Drop((*arguments)[1]);
+                }
+                else
+                {
+                    cout << "Drop what?" << endl;
+                }
+            }
+            else if(al == "take")
+            {
+                if(arguments->size() > 1)
+                {
+                    Take((*arguments)[1]);
+                }
+                else
+                {
+                    cout << "Take what?" << endl;
+                }
+            }
+            else if(al == "open")
+            {
+                if(arguments->size() > 1)
+                {
+                    Open((*arguments)[1]);
+                }
+                else
+                {
+                    cout << "Open what?" << endl;
+                }
+            }
+            else if(al == "read")
+            {
+                if(arguments->size() > 1)
+                {
+                    Read((*arguments)[1]);
+                }
+                else
+                {
+                    cout << "Read what?" << endl;
+                }
+            }
+            else if(al == "put")
+            {
+                if(arguments->size() > 1)
+                {
+                    Open((*arguments)[1]);
+                }
+                else
+                {
+                    cout << "Open what?" << endl;
+                }
+            }
+        }
+
+    }
+    else
+    {
+        NoText();
+    }
 
     return *arguments;
+}
+
+void ChatParser::Look()
+{
+
+}
+
+void ChatParser::Inventory()
+{
+
+}
+
+void ChatParser::TakeAll()
+{
+
+}
+
+void ChatParser::DropAll()
+{
+
+}
+
+void ChatParser::ExamineAll()
+{
+
+}
+
+bool ChatParser::Throw(string throwMe, string hitMe)
+{
+
+    return true;
+}
+
+bool Throw(string throwMe, string hitMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Move(string dir)
+{
+
+    return true;
+}
+
+bool ChatParser::Use(string useMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Use(string useMe, string onMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Drop(string dropMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Take(string takeMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Open(string openMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Read(string readMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Put(string putMe, string fillMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Drink(string drinkMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Turn(string turnMe, bool on)
+{
+
+    return true;
+}
+
+bool ChatParser::MoveObj(string moveMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Attack(string attackMe, string attackWithMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Examine(string examineMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Eat(string eatMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Close(string closeMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Tie(string tieMe, string toMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Break(string breakMe, string withMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Jump()
+{
+
+    return true;
+}
+
+bool ChatParser::Pray()
+{
+
+    return true;
+}
+
+bool ChatParser::Diagnose()
+{
+
+    return true;
+}
+
+bool ChatParser::Shout()
+{
+
+    return true;
+}
+
+bool ChatParser::Destroy(string destroyMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Swap(string swapMe, string withMe)
+{
+
+    return true;
+}
+
+bool ChatParser::LookAt(string lookAtMe)
+{
+
+    return true;
+}
+
+bool ChatParser::Save(int state)
+{
+
+    return true;
+}
+
+bool ChatParser::Restore(int state)
+{
+
+    return true;
 }
 
