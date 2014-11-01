@@ -3,11 +3,14 @@ using namespace::std;
 
 void Inventory::add(InventoryTable *inventory, string itemName, int itemQuantity){
     bool add = true;
-    for ( auto key : *inventory)
-        if (key.first == itemName) {
-            key.second.itemQuantity += itemQuantity;
-            add = false;
-        }
+
+    if(inventory->count(itemName)) {
+        hashValue temp = (*inventory)[itemName];
+        temp.itemQuantity += itemQuantity;
+        (*inventory)[itemName] =  temp;
+        cout << itemName << " " << (*inventory)[itemName].itemQuantity << endl;
+        add = false;
+    }
 
     if (add == true)
         (*inventory)[itemName] = hashValue {itemQuantity};
@@ -15,27 +18,28 @@ void Inventory::add(InventoryTable *inventory, string itemName, int itemQuantity
 
 void Inventory::remove(InventoryTable *inventory, string itemName, int itemQuantity){
     bool remove = true;
-    for ( auto key : *inventory)
-        if (key.first == itemName) {
-            key.second.itemQuantity -= itemQuantity;
-            remove = false;
-        }
+    if (inventory->count(itemName)) {
+        hashValue temp = (*inventory)[itemName];
+        temp.itemQuantity -= itemQuantity;
+        (*inventory)[itemName] =  temp;
+        cout << itemName << " " << (*inventory)[itemName].itemQuantity << endl;
+        remove = false;
+    }
 
     if (remove == true)
-    inventory->erase(itemName);
+        inventory->erase(itemName);
 }
 
 void Inventory::printInventory(InventoryTable *inventory){
     for ( auto key : *inventory)
-        cout << key.first << key.second.itemQuantity << endl;
+        cout << key.first << " " << key.second.itemQuantity << endl;
 }
 
 void Inventory::useItem(InventoryTable *inventory, string itemName){
     remove(inventory, itemName, 1);
 }
 
-InventoryTable *Inventory::createInventory()
-{
+InventoryTable *Inventory::createInventory(){
     InventoryTable *inventoryTable = new InventoryTable();
     return inventoryTable;
 }
