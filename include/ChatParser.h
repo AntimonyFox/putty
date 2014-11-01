@@ -42,7 +42,8 @@ class ChatParser
         static bool Read(string readMe);
         static bool Put(string putMe, string fillMe);
         static bool Drink(string drinkMe);
-        static bool Turn(string turnMe, bool on);
+        static bool Turn(string turnMe);
+        static bool Turn(string turnMe, string on);
         static bool MoveObj(string moveMe);
         static bool Attack(string attackMe, string attackWithMe);
         static bool Examine(string examineMe);

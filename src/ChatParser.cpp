@@ -314,6 +314,53 @@ vector<string> ChatParser::Parse(string parseMe)
                     cout << "Open what?" << endl;
                 }
             }
+            else if(al == "drink")
+            {
+                if(arguments->size() > 1)
+                {
+                    Drink((*arguments)[1]);
+                }
+                else
+                {
+                    cout << "Drink what?" << endl;
+                }
+            }
+            else if(al == "turn")
+            {
+                if(arguments->size() > 1)
+                {
+                    if(arguments->size() > 2)
+                        Turn((*arguments)[1], (*arguments)[2]);
+                    else
+                        Turn((*arguments)[1]);
+                }
+                else
+                {
+                    cout << "Turn what?" << endl;
+                }
+            }
+            else if(al == "moveobj")
+            {
+                if(arguments->size() > 1)
+                {
+                    MoveObj((*arguments)[1]);
+                }
+                else
+                {
+                    cout << "Move what?" << endl;
+                }
+            }
+            else if(al == "attack")
+            {
+                if(arguments->size() > 1)
+                {
+                    MoveObj((*arguments)[1]);
+                }
+                else
+                {
+                    cout << "Move what?" << endl;
+                }
+            }
         }
 
     }
@@ -416,7 +463,13 @@ bool ChatParser::Drink(string drinkMe)
     return true;
 }
 
-bool ChatParser::Turn(string turnMe, bool on)
+bool ChatParser::Turn(string turnMe, string on)
+{
+
+    return true;
+}
+
+bool ChatParser::Turn(string turnMe)
 {
 
     return true;
