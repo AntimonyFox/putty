@@ -58,8 +58,8 @@ class ChatParser
         static bool Destroy(string destroyMe);
         static bool Swap(string swapMe, string withMe);
         static bool LookAt(string lookAtMe);
-        static bool Save(int state);
-        static bool Restore(int state);
+        static bool Save(string state);
+        static bool Restore(string state);
         weak_ptr<int> currentRoom;
 
         static string lookAlias[3];

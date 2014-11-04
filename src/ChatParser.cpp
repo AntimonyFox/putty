@@ -171,6 +171,7 @@ vector<string> ChatParser::Parse(string parseMe)
         else
         {
             removeThe(arguments);
+
             if(al == "look")
             {
                 if(arguments->size() > 2)
@@ -244,6 +245,26 @@ vector<string> ChatParser::Parse(string parseMe)
             {
                 Move(al);
             }
+            else if(al == "pray")
+            {
+                Pray();
+            }
+            else if(al == "jump")
+            {
+                Jump();
+            }
+            else if(al == "diagnose")
+            {
+                Diagnose();
+            }
+            else if(al == "shout")
+            {
+                Shout();
+            }
+            else if(arguments->size() == 1)
+            {
+                cout << Capitalize(al) << " what?" << endl;
+            }
             else if(al == "use")
             {
                 if(arguments->size() > 1)
@@ -254,9 +275,18 @@ vector<string> ChatParser::Parse(string parseMe)
                 {
                     Use((*arguments)[1], (*arguments)[3]);
                 }
+
+            }
+            else if(al == "throw")
+            {
+
+                if(arguments->size() > 3 && ToLower((*arguments)[2]) == "at")
+                {
+                    Throw((*arguments)[1], (*arguments)[3]);
+                }
                 else
                 {
-                    cout << "Use what?" << endl;
+                    ChatError();
                 }
             }
             else if(al == "drop")
@@ -265,10 +295,7 @@ vector<string> ChatParser::Parse(string parseMe)
                 {
                     Drop((*arguments)[1]);
                 }
-                else
-                {
-                    cout << "Drop what?" << endl;
-                }
+
             }
             else if(al == "take")
             {
@@ -276,10 +303,7 @@ vector<string> ChatParser::Parse(string parseMe)
                 {
                     Take((*arguments)[1]);
                 }
-                else
-                {
-                    cout << "Take what?" << endl;
-                }
+
             }
             else if(al == "open")
             {
@@ -287,10 +311,7 @@ vector<string> ChatParser::Parse(string parseMe)
                 {
                     Open((*arguments)[1]);
                 }
-                else
-                {
-                    cout << "Open what?" << endl;
-                }
+
             }
             else if(al == "read")
             {
@@ -298,20 +319,17 @@ vector<string> ChatParser::Parse(string parseMe)
                 {
                     Read((*arguments)[1]);
                 }
-                else
-                {
-                    cout << "Read what?" << endl;
-                }
+
             }
             else if(al == "put")
             {
-                if(arguments->size() > 1)
+                if(arguments->size() > 3 && ToLower((*arguments)[2]) == "in")
                 {
-                    Open((*arguments)[1]);
+                    Put((*arguments)[1], (*arguments)[3]);
                 }
                 else
                 {
-                    cout << "Open what?" << endl;
+                    ChatError();
                 }
             }
             else if(al == "drink")
@@ -320,24 +338,15 @@ vector<string> ChatParser::Parse(string parseMe)
                 {
                     Drink((*arguments)[1]);
                 }
-                else
-                {
-                    cout << "Drink what?" << endl;
-                }
+
             }
             else if(al == "turn")
             {
                 if(arguments->size() > 1)
                 {
-                    if(arguments->size() > 2)
-                        Turn((*arguments)[1], (*arguments)[2]);
-                    else
-                        Turn((*arguments)[1]);
+                    Turn((*arguments)[1]);
                 }
-                else
-                {
-                    cout << "Turn what?" << endl;
-                }
+
             }
             else if(al == "moveobj")
             {
@@ -345,20 +354,99 @@ vector<string> ChatParser::Parse(string parseMe)
                 {
                     MoveObj((*arguments)[1]);
                 }
-                else
-                {
-                    cout << "Move what?" << endl;
-                }
+
             }
             else if(al == "attack")
             {
-                if(arguments->size() > 1)
+                if(arguments->size() > 3 && ToLower((*arguments)[2]) == "with")
                 {
-                    MoveObj((*arguments)[1]);
+                    Attack((*arguments)[1], (*arguments)[3]);
                 }
                 else
                 {
-                    cout << "Move what?" << endl;
+                    ChatError();
+                }
+            }
+            else if(al == "examine")
+            {
+                if(arguments->size() > 1)
+                {
+                    Examine((*arguments)[1]);
+                }
+            }
+            else if(al == "eat")
+            {
+                if(arguments->size() > 1)
+                {
+                    Eat((*arguments)[1]);
+                }
+            }
+            else if(al == "close")
+            {
+                if(arguments->size() > 1)
+                {
+                    Close((*arguments)[1]);
+                }
+            }
+            else if(al == "tie")
+            {
+                if(arguments->size() > 3 && ToLower((*arguments)[2]) == "with")
+                {
+                    Tie((*arguments)[1], (*arguments)[3]);
+                }
+                else
+                {
+                    ChatError();
+                }
+            }
+            else if(al == "break")
+            {
+                if(arguments->size() > 3 && ToLower((*arguments)[2]) == "with")
+                {
+                    Break((*arguments)[1], (*arguments)[3]);
+                }
+                else
+                {
+                    ChatError();
+                }
+            }
+            else if(al == "swap")
+            {
+                if(arguments->size() > 3 && ToLower((*arguments)[2]) == "with")
+                {
+                    Swap((*arguments)[1], (*arguments)[3]);
+                }
+                else
+                {
+                    ChatError();
+                }
+            }
+            else if(al == "destroy")
+            {
+                if(arguments->size() > 1)
+                {
+                    Close((*arguments)[1]);
+                }
+            }
+            else if(al == "examine")
+            {
+                if(arguments->size() > 1)
+                {
+                    LookAt((*arguments)[1]);
+                }
+            }
+            else if(al == "save")
+            {
+                if(arguments->size() > 1)
+                {
+                    Save((*arguments)[1]);
+                }
+            }
+            else if(al == "restore")
+            {
+                if(arguments->size() > 1)
+                {
+                    Restore((*arguments)[1]);
                 }
             }
         }
@@ -399,13 +487,7 @@ void ChatParser::ExamineAll()
 
 bool ChatParser::Throw(string throwMe, string hitMe)
 {
-
-    return true;
-}
-
-bool Throw(string throwMe, string hitMe)
-{
-
+    cout << "You throw the " << throwMe << " at the " << hitMe << "." << endl;
     return true;
 }
 
@@ -559,13 +641,13 @@ bool ChatParser::LookAt(string lookAtMe)
     return true;
 }
 
-bool ChatParser::Save(int state)
+bool ChatParser::Save(string state)
 {
 
     return true;
 }
 
-bool ChatParser::Restore(int state)
+bool ChatParser::Restore(string state)
 {
 
     return true;
