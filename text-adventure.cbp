@@ -36,7 +36,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/ChatParser.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/ChatParser.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
