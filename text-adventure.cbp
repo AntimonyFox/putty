@@ -37,8 +37,10 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="include/ChatParser.h" />
+		<Unit filename="include/Inventory.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/ChatParser.cpp" />
+		<Unit filename="src/Inventory.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
