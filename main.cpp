@@ -2,24 +2,15 @@
 #include "PuttyParser.h"
 #include "ChatParser.h"
 #include "Inventory.h"
+#include "Game.h"
 
 using namespace std;
 
 int main()
 {
-    PuttyParser().parse("game\\zork");
-    cout << "Hello world!" << endl;
+    Game game("game\\zork");
+    game.Start();
 
-    string uInput;
-
-    ChatParser::Init();
-
-    while(true)
-    {
-        cout << "> ";
-        getline(cin, uInput);
-        ChatParser::Parse(uInput);
-    }
 //    Inventory inventory;                        // create inventory
 //    auto inventoryTable = inventory.createInventory();
 //

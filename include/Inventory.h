@@ -17,14 +17,13 @@ typedef map<string, hashValue> InventoryTable;
 //map <string key, hashValue h> inventory;
 class Inventory
 {
-private:
-    string itemName;
 public:
-    void add(InventoryTable *inventory, string itemName, int itemQuantity);
-    void remove(InventoryTable *inventory, string itemName, int itemQuantity);
-    void printInventory(InventoryTable *inventory);
-    void useItem(InventoryTable *inventory, string itemName);
-    InventoryTable* createInventory();
-
+    Inventory();
+    void add(string itemName, int itemQuantity);
+    void remove(string itemName, int itemQuantity);
+    void printInventory();
+    void useItem(string itemName);
+private:
+    InventoryTable *inventory;
 };
 #endif // INVENTORY_H

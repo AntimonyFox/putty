@@ -1,8 +1,7 @@
 #ifndef PUTTYPARSER_H
 #define PUTTYPARSER_H
 
-#include "Room.h"
-#include "Thing.h"
+#include "Game.h"
 
 #include <cstdlib>
 #include <dirent.h>
@@ -16,17 +15,20 @@ using namespace std;
 class PuttyParser
 {
     public:
-        PuttyParser();
-        virtual ~PuttyParser();
-        void parse(string path);
-    protected:
-    private:
-        map<string, Room*> rooms;
-        map<string, Thing*> things;
+        static PuttyParser getInstance();
+        void Parse(string path, Game *game);
 
-        string bookTitle(string original);
-        string getWord(istringstream* iss);
-        bool isDelim(char c);
+    private:
+        void ParseSwitch(string path, Game *game);
+        void ParseChildren(string path, Game *game, DIR *root);
+        void ParseSettings(string path, Game *game);
+        void ParseRoom(string path, Game *game);
+        void ParseThing(string path, Game *game);
+        void InflateThings(Game *game);
+        void InflateRooms(Game *game);
+        string BookTitle(string original);
+        string GetWord(istringstream* iss);
+        bool IsDelim(char c);
 };
 
 #endif // PUTTYPARSER_H

@@ -41,8 +41,11 @@ string ChatParser::restoreAlias[2] = {"restore", "load"};
 
 map<string, string> ChatParser::aliasMap = map<string, string>();
 
-void ChatParser::Init()
+Game* ChatParser::game;
+void ChatParser::Init(Game *game)
 {
+    ChatParser::game = game;
+
     ADDARRAY("look", lookAlias);
     ADDARRAY("inventory", inventoryAlias);
     ADDARRAY("move", moveAlias);
@@ -118,7 +121,7 @@ void ChatParser::ChatError()
 
 void ChatParser::NoText()
 {
-    cout << "You havent typed anything." << endl;
+    cout << "You haven't typed anything." << endl;
 }
 
 void removeThe(vector<string> * purgeMe)
@@ -462,7 +465,8 @@ vector<string> ChatParser::Parse(string parseMe)
 
 void ChatParser::Look()
 {
-
+    system("CLS");
+    ChatParser::game->currentRoom->look();
 }
 
 void ChatParser::Inventory()
@@ -523,7 +527,37 @@ bool ChatParser::Take(string takeMe)
 
 bool ChatParser::Open(string openMe)
 {
-
+    auto item = game->currentRoom->contents[openMe];
+    if (item != nullptr)
+    {
+        if (item->isContainer)
+        {
+            if (!item->isOpen)
+            {
+                item->isOpen = true;
+                if (!item->contents.empty())
+                {
+                    cout << "Opening the " << item->name << " reveals ";
+                    string list;
+                    for (auto content = item->contents.begin(); content != item->contents.end(); ++content)
+                    {
+                        if (list != "")
+                        {
+                            list += ", ";
+                            if (content == --item->contents.end())
+                                list += "and ";
+                        }
+                        list += content->second->ArticleName();
+                    }
+                    cout << list << "." << endl;
+                }
+            }
+            else
+            {
+                cout << "It is already open." << endl;
+            }
+        }
+    }
     return true;
 }
 
@@ -583,7 +617,22 @@ bool ChatParser::Eat(string eatMe)
 
 bool ChatParser::Close(string closeMe)
 {
-
+    auto item = game->currentRoom->contents[closeMe];
+    if (item != nullptr)
+    {
+        if (item->isContainer)
+        {
+            if (item->isOpen)
+            {
+                item->isOpen = false;
+                cout << "Closed." << endl;
+            }
+            else
+            {
+                cout << "It is already closed." << endl;
+            }
+        }
+    }
     return true;
 }
 

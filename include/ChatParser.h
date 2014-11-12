@@ -3,7 +3,9 @@
 
 #include "Room.h"
 #include "Thing.h"
+#include "Game.h"
 
+#include <cstdlib>
 #include <iostream>
 #include <map>
 #include <memory>
@@ -11,21 +13,13 @@
 
 using namespace std;
 
-class tempObj{};
-class tempRoom
-{
-    public:
-        vector<tempObj> objectList;
-        tempObj getObject(string name);
-};
-
-
 class ChatParser
 {
     public:
         vector<string> static Parse(string parseMe);
+        static Game *game;
 
-        static void Init();
+        static void Init(Game *game);
         static void ChatError();
         static void NoText();
 

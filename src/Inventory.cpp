@@ -2,7 +2,11 @@
 
 using namespace::std;
 
-void Inventory::add(InventoryTable *inventory, string itemName, int itemQuantity){
+Inventory::Inventory() {
+    inventory = new InventoryTable();
+}
+
+void Inventory::add(string itemName, int itemQuantity){
     bool add = true;
 
     if(inventory->count(itemName)) {
@@ -17,7 +21,7 @@ void Inventory::add(InventoryTable *inventory, string itemName, int itemQuantity
         (*inventory)[itemName] = hashValue {itemQuantity};
 }
 
-void Inventory::remove(InventoryTable *inventory, string itemName, int itemQuantity){
+void Inventory::remove(string itemName, int itemQuantity){
     bool remove = true;
     if (inventory->count(itemName)) {
         hashValue temp = (*inventory)[itemName];
@@ -31,16 +35,11 @@ void Inventory::remove(InventoryTable *inventory, string itemName, int itemQuant
         inventory->erase(itemName);
 }
 
-void Inventory::printInventory(InventoryTable *inventory){
+void Inventory::printInventory(){
     for ( auto key : *inventory)
         cout << key.first << " " << key.second.itemQuantity << endl;
 }
 
-void Inventory::useItem(InventoryTable *inventory, string itemName){
-    remove(inventory, itemName, 1);
-}
-
-InventoryTable *Inventory::createInventory(){
-    InventoryTable *inventoryTable = new InventoryTable();
-    return inventoryTable;
+void Inventory::useItem(string itemName){
+    remove(itemName, 1);
 }

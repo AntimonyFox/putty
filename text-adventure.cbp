@@ -13,7 +13,7 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-std=c++11" />
+					<Add option="-std=c++0x" />
 					<Add option="-g" />
 					<Add directory="include" />
 				</Compiler>
@@ -31,17 +31,19 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-std=c++11" />
+			<Add option="-std=c++0x" />
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="include/ChatParser.h" />
+		<Unit filename="include/Game.h" />
 		<Unit filename="include/Inventory.h" />
 		<Unit filename="include/PuttyParser.h" />
 		<Unit filename="include/Room.h" />
 		<Unit filename="include/Thing.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/ChatParser.cpp" />
+		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/Inventory.cpp" />
 		<Unit filename="src/PuttyParser.cpp" />
 		<Unit filename="src/Room.cpp" />

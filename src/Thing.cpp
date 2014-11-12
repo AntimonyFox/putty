@@ -11,7 +11,22 @@ Thing::~Thing()
     //dtor
 }
 
-void Thing::look()
+string Thing::GetName()
+{
+    if (name != "")
+        return name;
+    else
+        return filename;
+}
+
+string Thing::ArticleName()
+{
+    string n = GetName();
+    string article = (n[0] == 'a' || n[0] == 'e' || n[0] == 'i' || n[0] == 'o' || n[0] == 'u') ? "an" : "a";
+    return article + " " + n;
+}
+
+void Thing::Look()
 {
     cout << " "; for (int i = 0; i < filename.length()+2; i++) cout << "-"; cout << endl;
     cout << "| " << filename << " |" << endl;
@@ -30,7 +45,7 @@ void Thing::look()
     if (!contents.empty())
     {
         cout << "Contents:\t";
-        for (string content : contents)
+        for (string content : contentNames)
             cout << content << ", ";
         cout << endl;
     }

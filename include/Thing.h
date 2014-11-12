@@ -1,16 +1,21 @@
 #ifndef THING_H
 #define THING_H
 
+#include <map>
 #include <string>
 #include <vector>
+
 using namespace std;
 
 class Thing
 {
+    friend class PuttyParser;
     public:
         Thing();
         virtual ~Thing();
-        void look();
+        void Look();
+        string GetName();
+        string ArticleName();
 
         string appearance;
         string name;
@@ -18,17 +23,20 @@ class Thing
 
         vector<string> keywords;
         string description;
-        vector<string> contents;
         int size = -1;
         int capacity = 0;
+        map<string, Thing*> contents;
+
+        bool isOpen = false;
 
         bool isLocked = false;
         bool isFree = false;
         bool isReadable = false;
         bool isAnchored = false;
         bool isContainer = false;
-    protected:
+
     private:
+        vector<string> contentNames;
 };
 
 #endif // THING_H
