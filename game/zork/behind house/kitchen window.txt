@@ -1,0 +1,12 @@
+keywords: small kitchen window
+
+description-closed: "The window is slightly ajar, but not enough to allow entry."
+description-open: "The kitchen window is open, but I can't tell what's beyond it."
+
+isContainer
+capacity: 0
+
+::open: "With great effort, you open the window far enough to allow entry."
+::close: "The window closes (more easily than it opened)."
+
+::enter: kitchen

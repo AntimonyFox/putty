@@ -1,0 +1,12 @@
+name: glass bottle
+
+description-untouched: "A bottle is sitting on the table."
+
+isFree
+isContainer
+capacity: 1
+size: 2
+
+contains: water
+
+::throw: "The bottle hits the far wall and shatters.", destroy

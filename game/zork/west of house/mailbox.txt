@@ -1,0 +1,8 @@
+name: small mailbox
+
+isFree
+isAnchored
+
+isContainer
+capacity: 4
+contains: leaflet

@@ -1,0 +1,5 @@
+name: broken lantern
+keywords: lamp
+
+isFree
+size: 6

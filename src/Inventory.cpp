@@ -1,4 +1,5 @@
 #include "Inventory.h"
+
 using namespace::std;
 
 void Inventory::add(InventoryTable *inventory, string itemName, int itemQuantity){

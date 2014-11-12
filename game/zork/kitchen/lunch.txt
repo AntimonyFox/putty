@@ -1,0 +1,6 @@
+appearance: hot pepper sandwich
+
+isFree
+size: 2
+
+::eat: "Thank you very much. It really hit the spot.", destroy

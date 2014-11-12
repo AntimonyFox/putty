@@ -1,0 +1,10 @@
+name: quantity of water
+
+isFree
+size: 1
+
+::drink: "Thank you very much. I was rather thirsty (from all this talking, probably)."
+::spill: "The water spills to the floor and evaporates immediately."
+::pour: spill
+
+onDie: spill

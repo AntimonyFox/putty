@@ -1,10 +1,4 @@
 #include "PuttyParser.h"
-#include <fstream>
-#include <dirent.h>
-#include <iostream>
-#include <sstream>
-#include <vector>
-#include <cstdlib>
 
 PuttyParser::PuttyParser()
 {
@@ -15,71 +9,6 @@ PuttyParser::~PuttyParser()
 {
     //dtor
 }
-
-bool isDelim(char c)
-{
-    vector<char> delims = {':', ' ', ',', static_cast<char>(-1)};
-    for (char d : delims)
-    {
-        if (d == c)
-            return true;
-    }
-    return false;
-}
-
-string getWord (istringstream *iss)
-{
-    string word = "";
-    bool inQuotes = false;
-    bool isEscaping = false;
-    char c;
-    while (*iss)
-    {
-        c = iss->get();
-        if (isEscaping)
-        {
-            if (c == '"')
-                word += '"';
-            else if (c == '\\')
-                word += '\\';
-            else if (c == 'n')
-                word += '\n';
-            isEscaping = false;
-        }
-        else if (c == '\\')
-            isEscaping = true;
-        else if (c == '"')
-            inQuotes ^= true;
-        else if (!isDelim(c) || inQuotes)
-            word += c;
-        else if (word != "")
-            break;
-    }
-    return word;
-}
-
-string bookTitle (string original)
-{
-    string out = "";
-    int nextSpace;
-
-    out += toupper(original[0]);
-    for (int i = 1; i < original.length(); i++)
-    {
-        if (original[i] == ' ')
-        {
-            nextSpace = original.find(' ', i+1);
-            if (nextSpace == -1)
-                nextSpace = original.length();
-        }
-        if (original[i-1] == ' ' && nextSpace - i > 3)
-            out += toupper(original[i]);
-        else
-            out += original[i];
-    }
-    return out;
-}
-
 
 void PuttyParser::parse(string path)
 {
@@ -197,4 +126,68 @@ void PuttyParser::parse(string path)
         }
         cout << endl;
     }
+}
+
+string PuttyParser::getWord(istringstream *iss)
+{
+    string word = "";
+    bool inQuotes = false;
+    bool isEscaping = false;
+    char c;
+    while (*iss)
+    {
+        c = iss->get();
+        if (isEscaping)
+        {
+            if (c == '"')
+                word += '"';
+            else if (c == '\\')
+                word += '\\';
+            else if (c == 'n')
+                word += '\n';
+            isEscaping = false;
+        }
+        else if (c == '\\')
+            isEscaping = true;
+        else if (c == '"')
+            inQuotes ^= true;
+        else if (!isDelim(c) || inQuotes)
+            word += c;
+        else if (word != "")
+            break;
+    }
+    return word;
+}
+
+string PuttyParser::bookTitle(string original)
+{
+    string out = "";
+    int nextSpace;
+
+    out += toupper(original[0]);
+    for (unsigned int i = 1; i < original.length(); i++)
+    {
+        if (original[i] == ' ')
+        {
+            nextSpace = original.find(' ', i+1);
+            if (nextSpace == -1)
+                nextSpace = original.length();
+        }
+        if (original[i-1] == ' ' && nextSpace - i > 3)
+            out += toupper(original[i]);
+        else
+            out += original[i];
+    }
+    return out;
+}
+
+bool PuttyParser::isDelim(char c)
+{
+    vector<char> delims = {':', ' ', ',', static_cast<char>(-1)};
+    for (char d : delims)
+    {
+        if (d == c)
+            return true;
+    }
+    return false;
 }

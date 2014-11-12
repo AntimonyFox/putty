@@ -1,0 +1,8 @@
+name: trophy case
+
+isFree
+isAnchored
+isContainer
+capacity: 20
+
+::take: "The trophy case is securely fastened to the wall."

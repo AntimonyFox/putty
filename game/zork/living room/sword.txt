@@ -1,0 +1,6 @@
+keywords: elvish sword antiquity
+
+description-untouched: "Above the trophy case hangs an elvish sword of great antiquity."
+
+isFree
+size: 10

@@ -1,0 +1,7 @@
+name: kitchen table
+
+isFree
+isAnchored
+isSurface
+
+contains: sack, bottle

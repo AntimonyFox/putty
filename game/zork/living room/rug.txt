@@ -1,0 +1,9 @@
+name: large oriental rug
+
+isFree
+isAnchored
+isMovable
+
+hides: trap door
+
+::take: "The rug is extremely heavy and cannot be carried."

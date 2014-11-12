@@ -1,8 +1,10 @@
 #ifndef INVENTORY_H
 #define INVENTORY_H
-#include <string>
+
 #include <iostream>
+#include <string>
 #include <map>
+
 using namespace::std;
 
 struct hashValue

@@ -1,10 +1,13 @@
 #ifndef CHATPARSER_H
 #define CHATPARSER_H
 
+#include "Room.h"
+#include "Thing.h"
+
 #include <iostream>
-#include <vector>
-#include <memory>
 #include <map>
+#include <memory>
+#include <vector>
 
 using namespace std;
 

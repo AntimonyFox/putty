@@ -1,0 +1,11 @@
+name: brown sack
+keywords: bag
+
+description-untouched: "On the table is an elongated brown sack, smelling of hot peppers."
+
+isFree
+isContainer
+capacity: 6
+size: 1
+
+contains: lunch, garlic

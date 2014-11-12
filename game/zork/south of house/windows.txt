@@ -1,0 +1,5 @@
+keywords: boarded window
+
+isLocked
+
+::open: "The windows are boarded and can't be opened."
