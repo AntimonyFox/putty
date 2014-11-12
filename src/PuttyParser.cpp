@@ -1,8 +1,8 @@
 #include "PuttyParser.h"
 
 #define IS_DIRECTORY(root) root != NULL
-#define IS_ROOM(path) path.rfind("\\area.txt") != string::npos
-#define IS_SETTINGS(path) path.rfind("\\settings.txt") != string::npos
+#define IS_ROOM(path) path.rfind("/area.txt") != string::npos
+#define IS_SETTINGS(path) path.rfind("/settings.txt") != string::npos
 
 PuttyParser PuttyParser::getInstance()
 {
@@ -46,7 +46,7 @@ void PuttyParser::ParseChildren(string path, Game *game, DIR *root)
         if (entry->d_name[0] != '.')
         {
             string subpath = path;
-            subpath += "\\";
+            subpath += "/";
             subpath += entry->d_name;
             ParseSwitch (subpath, game);
         }
@@ -81,8 +81,8 @@ void PuttyParser::ParseSettings(string path, Game *game)
 
 void PuttyParser::ParseRoom(string path, Game *game)
 {
-    string slug = path.substr(0,path.rfind("\\area.txt"));
-    slug = slug.substr(slug.rfind("\\")+1);
+    string slug = path.substr(0,path.rfind("/area.txt"));
+    slug = slug.substr(slug.rfind("/")+1);
 
     Room *room = new Room();
     room->name = BookTitle(slug);
@@ -117,7 +117,7 @@ void PuttyParser::ParseRoom(string path, Game *game)
 void PuttyParser::ParseThing(string path, Game *game)
 {
     string slug = path.substr(0,path.rfind(".txt"));
-    slug = slug.substr(slug.rfind("\\")+1);
+    slug = slug.substr(slug.rfind("/")+1);
 
     Thing *thing = new Thing();
     thing->filename = slug;
@@ -206,13 +206,13 @@ string PuttyParser::GetWord(istringstream *iss)
         {
             if (c == '"')
                 word += '"';
-            else if (c == '\\')
-                word += '\\';
+            else if (c == '/')
+                word += '/';
             else if (c == 'n')
                 word += '\n';
             isEscaping = false;
         }
-        else if (c == '\\')
+        else if (c == '/')
             isEscaping = true;
         else if (c == '"')
             inQuotes ^= true;

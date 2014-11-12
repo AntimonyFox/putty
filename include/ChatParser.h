@@ -29,6 +29,7 @@ class ChatParser
         static void DropAll();
         static void ExamineAll();
 
+        //Steve
         static bool Throw(string throwMe, string hitMe);
         static bool Move(string dir);
         static bool Use(string useMe);
@@ -38,6 +39,8 @@ class ChatParser
         static bool Open(string openMe);
         static bool Read(string readMe);
         static bool Put(string putMe, string fillMe);
+
+        //Victor
         static bool Drink(string drinkMe);
         static bool Turn(string turnMe);
         static bool Turn(string turnMe, string on);
@@ -48,6 +51,8 @@ class ChatParser
         static bool Close(string closeMe);
         static bool Tie(string tieMe, string toMe);
         static bool Break(string breakMe, string withMe);
+
+        //Fox
         static bool Jump();
         static bool Pray();
         static bool Diagnose();

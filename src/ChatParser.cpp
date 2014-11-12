@@ -521,7 +521,34 @@ bool ChatParser::Drop(string dropMe)
 
 bool ChatParser::Take(string takeMe)
 {
-
+    Thing *thing;
+    if (game->currentRoom->contents.count(takeMe))
+    {
+        thing = game->currentRoom->contents[takeMe];
+    }
+    else
+    {
+        for (auto roomThing : game->currentRoom->contents)
+        {
+            if (roomThing.second->isContainer && roomThing.second->isOpen)
+            {
+                for (auto innerThing : roomThing.second->contents)
+                {
+                    if (innerThing.second->contents.count(takeMe))
+                    {
+                        thing = innerThing.second->contents[takeMe];
+                        innerThing.second->contents.erase(takeMe);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+//    auto item = game->currentRoom->contents[takeMe];
+//    if (item != nullptr)
+//    {
+//        game->inventory->add()
+//    }
     return true;
 }
 
