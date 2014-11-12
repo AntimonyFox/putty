@@ -43,3 +43,8 @@ void Inventory::printInventory(){
 void Inventory::useItem(string itemName){
     remove(itemName, 1);
 }
+
+Thing *Inventory::getItem(string itemName){
+    hashValue temp = (*inventory)[itemName];
+    return temp.item;
+}

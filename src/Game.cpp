@@ -19,7 +19,7 @@ void Game::Start()
 {
     currentRoom = (startingRoom != "") ? rooms[startingRoom] : rooms.begin()->second;
     inventory = new Inventory();
-
+    inventory->add ((*things)["leaflet"], 1);
     ChatParser::Init(this);
 
     ChatParser::Look();

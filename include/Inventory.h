@@ -4,13 +4,14 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include "Thing.h"
 
 using namespace::std;
 
 struct hashValue
 {
     int itemQuantity;
-    //object toBeEntity;
+    Thing* item;
 };
 
 typedef map<string, hashValue> InventoryTable;
@@ -23,6 +24,7 @@ public:
     void remove(string itemName, int itemQuantity);
     void printInventory();
     void useItem(string itemName);
+    Thing *getItem(string itemName);
 private:
     InventoryTable *inventory;
 };

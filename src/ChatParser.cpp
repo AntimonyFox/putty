@@ -515,6 +515,10 @@ bool ChatParser::Use(string useMe, string onMe)
 
 bool ChatParser::Drop(string dropMe)
 {
+    //get item
+    Thing* temp = game->inventory->getItem(dropMe);
+    game->inventory->remove(dropMe, 1);
+    game->currentRoom->contents[dropMe] = temp;
 
     return true;
 }
