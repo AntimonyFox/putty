@@ -1,14 +1,14 @@
 #include <iostream>
 #include "PuttyParser.h"
 #include "ChatParser.h"
-#include "Inventory.h"
+#include "Container.h"
 #include "Game.h"
 
 using namespace std;
 
 int main()
 {
-    Game game("/Users/stevenchitwood/Documents/Cogswell/Classes/AdvanceC++/TextBasedGameProject/putty/game/zork");
+    Game game("game/zork");
     game.Start();
 
 //    Inventory inventory;                        // create inventory

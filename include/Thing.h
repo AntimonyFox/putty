@@ -13,27 +13,29 @@ class Thing
     public:
         Thing();
         virtual ~Thing();
-        void Look();
-        string GetName();
-        string ArticleName();
 
+        //Static
         string appearance;
         string name;
         string filename;
-
         vector<string> keywords;
         string description;
         int size = -1;
         int capacity = 0;
+
+        //Dynamic
         map<string, Thing*> contents;
-
         bool isOpen = false;
-
         bool isLocked = false;
         bool isFree = false;
         bool isReadable = false;
         bool isAnchored = false;
         bool isContainer = false;
+
+        //Functions
+        void Look();
+        string GetName();
+        string ArticleName();
 
     private:
         vector<string> contentNames;

@@ -17,11 +17,17 @@ class Room
     public:
         Room();
         virtual ~Room();
-        void look();
-        void print();
+
+        //Static
         string name;
         string description;
+
+        //Dynamic
         map<string, Thing*> contents;
+
+        //Functions
+        void look();
+        void print();
 
     private:
         vector<string> contentNames;

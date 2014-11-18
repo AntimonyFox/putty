@@ -3,7 +3,7 @@
 
 #include "Room.h"
 #include "Thing.h"
-#include "Inventory.h"
+#include "Container.h"
 
 #include <map>
 
@@ -17,11 +17,19 @@ class Game
         void Start();
 
     private:
+        //Static
+        string startingRoom;
         map<string, Room*> rooms;
         map<string, Thing*> things;
-        string startingRoom;
+
+        //Dynamic
+        Container *inventory;
         Room *currentRoom;
-        Inventory *inventory;
+        bool isLoaded;
+
+        //Functions
+        Thing *GetItem(string itemName);
+        Thing *GetItemInRoom(string itemName);
 };
 
 #endif // GAME_H

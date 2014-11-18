@@ -61,7 +61,7 @@ void ChatParser::Init(Game *game)
     ADDARRAY("down", downAlias);
     ADDARRAY("throw", throwAlias);
     ADDARRAY("use", useAlias);
-    ADDARRAY("drop ", dropAlias);
+    ADDARRAY("drop", dropAlias);
     ADDARRAY("take", takeAlias);
     ADDARRAY("open", openAlias);
     ADDARRAY("read", readAlias);
@@ -70,6 +70,7 @@ void ChatParser::Init(Game *game)
     ADDARRAY("turn", turnAlias);
     ADDARRAY("moveobj", moveObjAlias);
     ADDARRAY("attack", attackAlias);
+    ADDARRAY("examine", examineAlias);
     ADDARRAY("eat", eatAlias);
     ADDARRAY("close", closeAlias);
     ADDARRAY("tie", tieAlias);
@@ -452,6 +453,10 @@ vector<string> ChatParser::Parse(string parseMe)
                     Restore((*arguments)[1]);
                 }
             }
+            else
+            {
+                cout << "Unknown command: " << al << "." << endl;
+            }
         }
 
     }
@@ -465,13 +470,15 @@ vector<string> ChatParser::Parse(string parseMe)
 
 void ChatParser::Look()
 {
-    system("CLS");
     ChatParser::game->currentRoom->look();
 }
 
 void ChatParser::Inventory()
 {
-
+    if (!game->inventory->IsEmpty())
+        game->inventory->printContainer();
+    else
+        cout << "You are empty-handed." << endl;
 }
 
 void ChatParser::TakeAll()
@@ -516,43 +523,69 @@ bool ChatParser::Use(string useMe, string onMe)
 bool ChatParser::Drop(string dropMe)
 {
     //get item
-    Thing* temp = game->inventory->getItem(dropMe);
-    game->inventory->remove(dropMe, 1);
-    game->currentRoom->contents[dropMe] = temp;
+    Thing* temp = game->inventory->GetItem(dropMe);
+    if (temp != nullptr)
+    {
+        game->inventory->remove(dropMe, 1);
+        game->currentRoom->contents[dropMe] = temp;
+        cout << "Dropped." << endl;
+    }
+    else
+    {
+        cout << "You don't have the " << dropMe << "." << endl;
+    }
 
     return true;
 }
 
 bool ChatParser::Take(string takeMe)
 {
-    Thing *thing;
-    if (game->currentRoom->contents.count(takeMe))
+    Thing *thing = nullptr;
+    for (auto roomPair : game->currentRoom->contents)
     {
-        thing = game->currentRoom->contents[takeMe];
-    }
-    else
-    {
-        for (auto roomThing : game->currentRoom->contents)
+        Thing *roomThing = roomPair.second;
+        if (roomThing->filename == takeMe)
         {
-            if (roomThing.second->isContainer && roomThing.second->isOpen)
+            thing = roomThing;
+            game->currentRoom->contents.erase(takeMe);
+            break;
+        }
+        else if (roomThing->isContainer && roomThing->isOpen)
+        {
+            for (auto innerPair : roomThing->contents)
             {
-                for (auto innerThing : roomThing.second->contents)
+                Thing *innerThing = innerPair.second;
+                if (innerThing->filename == takeMe)
                 {
-                    if (innerThing.second->contents.count(takeMe))
-                    {
-                        thing = innerThing.second->contents[takeMe];
-                        innerThing.second->contents.erase(takeMe);
-                        break;
-                    }
+                    thing = innerThing;
+                    roomThing->contents.erase(takeMe);
+                    break;
                 }
             }
         }
     }
-//    auto item = game->currentRoom->contents[takeMe];
-//    if (item != nullptr)
-//    {
-//        game->inventory->add()
-//    }
+
+    if (thing != nullptr)
+    {
+        game->inventory->add(thing);
+        cout << "Taken." << endl;
+    }
+    else
+    {
+        if (game->inventory->GetItem(takeMe))
+        {
+            cout << "You already have that!" << endl;
+        }
+        else if (game->things.count(takeMe) > 0)
+        {
+            cout << "You can't see any " << takeMe << " here!" << endl;
+        }
+        else
+        {
+            cout << "I don't know the word '" << takeMe << "'." << endl;
+        }
+    }
+
     return true;
 }
 
@@ -636,7 +669,22 @@ bool ChatParser::Attack(string attackMe, string attackWithMe)
 
 bool ChatParser::Examine(string examineMe)
 {
-
+    Thing *thing = game->GetItemInRoom(examineMe);
+    if (thing != nullptr)
+    {
+        thing->Look();
+    }
+    else
+    {
+        if (game->things.count(examineMe) > 0)
+        {
+            cout << "You can't see any " << examineMe << " here!" << endl;
+        }
+        else
+        {
+            cout << "I don't know the word '" << examineMe << "'." << endl;
+        }
+    }
     return true;
 }
 

@@ -48,8 +48,8 @@ void Room::look()
     for (auto item : contents)
         if (item.second->isFree)
             safePrint("There is " + item.second->ArticleName() + " here.", &row);
-    for (int i = row; i < MAX_ROWS-1; i++)
-        cout << endl;
+//    for (int i = row; i < MAX_ROWS-1; i++)
+//        cout << endl;
 }
 
 void Room::print()

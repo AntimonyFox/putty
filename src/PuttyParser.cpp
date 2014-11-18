@@ -12,9 +12,17 @@ PuttyParser PuttyParser::getInstance()
 
 void PuttyParser::Parse(string path, Game *game)
 {
-    ParseSwitch(path, game);
-    InflateThings(game);
-    InflateRooms(game);
+    if (opendir(path.c_str()) == nullptr)
+    {
+        cout << "Game could not be loaded. Incorrect game path?" << endl;
+    }
+    else
+    {
+        ParseSwitch(path, game);
+        InflateThings(game);
+        InflateRooms(game);
+        game->isLoaded = true;
+    }
 }
 
 void PuttyParser::ParseSwitch(string path, Game *game)
