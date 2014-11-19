@@ -6,6 +6,7 @@ isFree
 isContainer
 capacity: 1
 size: 2
+isBreakable
 
 contains: water
 

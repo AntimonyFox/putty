@@ -31,6 +31,7 @@ class Thing
         bool isReadable = false;
         bool isAnchored = false;
         bool isContainer = false;
+        bool isBreakable = false;
 
         //Functions
         void Look();

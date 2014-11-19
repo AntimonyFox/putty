@@ -155,6 +155,8 @@ void PuttyParser::ParseThing(string path, Game *game)
                         thing->isAnchored = true;
                     else if (command == "isContainer")
                         thing->isContainer = true;
+                    else if (command == "isBreakable")
+                        thing->isBreakable = true;
                 }
                 else
                 {

@@ -498,7 +498,25 @@ void ChatParser::ExamineAll()
 
 bool ChatParser::Throw(string throwMe, string hitMe)
 {
-    cout << "You throw the " << throwMe << " at the " << hitMe << "." << endl;
+    //copy item as temp (for room)
+    //Thing temp = throwMe;
+    Thing* temp = game->inventory->GetItem(throwMe);
+    //remove item from Inventory
+    game->inventory->remove(throwMe, 1);
+
+    //check if breakable
+    if(temp->isBreakable == true){
+    //if true - do nothing!
+        cout << "it's broke, don't throw! Bahahahahahahaha" << endl;
+        //delete the copy
+        return false;
+    }
+    //if false - add copy to room
+    else{
+        cout << "You throw the " << throwMe << " at the " << hitMe << "." << endl;
+        game->currentRoom->contents[throwMe] = temp;
+        return true;
+    }
     return true;
 }
 
