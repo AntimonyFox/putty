@@ -1,0 +1,7 @@
+keywords: apple, juice
+isFree
+isReadable
+isDrinkable
+
+size: 1
+description: "It's apple juice."

@@ -639,6 +639,26 @@ bool ChatParser::Put(string putMe, string fillMe)
 
 bool ChatParser::Drink(string drinkMe)
 {
+    auto item = game->inventory->GetItem(drinkMe);
+
+    if(item != nullptr)
+    {
+        if(item->isDrinkable)
+        {
+            cout << "You drink the " << item->GetName() << "." << endl;
+            game->inventory->remove(drinkMe,1);
+        }
+        else
+        {
+            cout << "You can't drink that!" << endl;
+        }
+
+    }
+    else
+    {
+        cout << "You don't have that!" << endl;
+    }
+
 
     return true;
 }
@@ -646,17 +666,91 @@ bool ChatParser::Drink(string drinkMe)
 bool ChatParser::Turn(string turnMe, string on)
 {
 
+    auto item = game->inventory->GetItem(turnMe);
+
+    if(item == nullptr)
+        item = game->currentRoom->contents[turnMe];
+
+    if(item != nullptr)
+    {
+        if(item->isSwitch != -1)
+        {
+            bool s = item->Turn(on);
+
+            if(s)
+                cout << "You turn the " << item->GetName() << " " << on << "." << endl;
+            else
+                cout << "You can't turn this object " << on << "." << endl;
+
+        }
+        else
+        {
+            cout << "That object can't be switched." << endl;
+        }
+    }
+    else
+    {
+        cout << "That object is not here." << endl;
+    }
+
     return true;
 }
 
 bool ChatParser::Turn(string turnMe)
 {
+    auto item = game->inventory->GetItem(turnMe);
+    if(item == nullptr)
+        item = game->currentRoom->contents[turnMe];
+
+    if(item != nullptr)
+    {
+        if(item->isSwitch != -1)
+        {
+            bool s = item->Turn();
+
+            if(s)
+                cout << "You turn the " << item->GetName() << "." << endl;
+            else
+                cout << "You can't turn this object." << endl;
+
+        }
+        else
+        {
+            cout << "That object can't be switched." << endl;
+        }
+    }
+    else
+    {
+        cout << "That object is not here." << endl;
+    }
 
     return true;
 }
 
 bool ChatParser::MoveObj(string moveMe)
 {
+    auto item = game->currentRoom->contents[moveMe];
+
+    if(item != nullptr)
+    {
+        if(item->isMoveable)
+        {
+            bool s = item->Move();
+
+            if(!s)
+            {
+                cout << "Nothing seems to happen." << endl;
+            }
+        }
+        else
+        {
+            cout << "That object can't be moved." << endl;
+        }
+    }
+    else
+    {
+        cout << "That object is not here." << endl;
+    }
 
     return true;
 }
@@ -690,6 +784,25 @@ bool ChatParser::Examine(string examineMe)
 
 bool ChatParser::Eat(string eatMe)
 {
+    auto item = game->inventory->GetItem(eatMe);
+
+    if(item != nullptr)
+    {
+        if(item->isEdible)
+        {
+            cout << "You eat the " << item->GetName() << "." << endl;
+            game->inventory->remove(eatMe,1);
+        }
+        else
+        {
+            cout << "You can't eat that!" << endl;
+        }
+
+    }
+    else
+    {
+        cout << "You don't have that!" << endl;
+    }
 
     return true;
 }
@@ -711,43 +824,52 @@ bool ChatParser::Close(string closeMe)
                 cout << "It is already closed." << endl;
             }
         }
+        else
+        {
+            cout << "That object can't be closed." << endl;
+        }
+    }
+    else
+    {
+        cout << "That object does not exist." << endl;
     }
     return true;
 }
 
 bool ChatParser::Tie(string tieMe, string toMe)
 {
-
+    //THIS GON BE WEIRD
     return true;
 }
 
 bool ChatParser::Break(string breakMe, string withMe)
 {
+    auto item = game->currentRoom->contents[breakMe];
 
     return true;
 }
 
 bool ChatParser::Jump()
 {
-
+    cout << "You jump up and down for joy." << endl;
     return true;
 }
 
 bool ChatParser::Pray()
 {
-
+    cout << "You kneel down and pray to the Fox god." << endl;
     return true;
 }
 
 bool ChatParser::Diagnose()
 {
-
+    //HOW DOES THIS WORK
     return true;
 }
 
 bool ChatParser::Shout()
 {
-
+    cout << "YOU SHOUT!" << endl;
     return true;
 }
 
@@ -765,7 +887,7 @@ bool ChatParser::Swap(string swapMe, string withMe)
 
 bool ChatParser::LookAt(string lookAtMe)
 {
-
+    Examine(lookAtMe);
     return true;
 }
 

@@ -5,4 +5,4 @@ isAnchored
 
 isContainer
 capacity: 4
-contains: leaflet
+contains: leaflet, leaflet

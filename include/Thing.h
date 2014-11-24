@@ -31,9 +31,18 @@ class Thing
         bool isReadable = false;
         bool isAnchored = false;
         bool isContainer = false;
+        bool isDrinkable = false;
+        int isSwitch = -1;
+        bool isMoveable = false;
+        bool isEdible = false;
+        bool isBreakable = false;
+        bool canTie = false;
 
         //Functions
         void Look();
+        bool Turn(string on = "");
+        bool Move();
+        string Examine();
         string GetName();
         string ArticleName();
 

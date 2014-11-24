@@ -28,11 +28,11 @@ string Thing::ArticleName()
 
 void Thing::Look()
 {
-    cout << " "; for (int i = 0; i < filename.length()+2; i++) cout << "-"; cout << endl;
+    cout << " "; for (unsigned int i = 0; i < filename.length()+2; i++) cout << "-"; cout << endl;
     cout << "| " << filename << " |" << endl;
     if (name != "")
         cout << name << endl;
-    cout << " "; for (int i = 0; i < filename.length()+2; i++) cout << "-"; cout << endl;
+    cout << " "; for (unsigned int i = 0; i < filename.length()+2; i++) cout << "-"; cout << endl;
 
     if (!keywords.empty())
     {
@@ -66,4 +66,14 @@ void Thing::Look()
     cout << endl;
 
     cout << "----------------------------------------" << endl;
+}
+
+bool Thing::Turn(string on)
+{
+    return false;
+}
+
+bool Thing::Move()
+{
+    return false;
 }

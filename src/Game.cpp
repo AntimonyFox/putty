@@ -70,4 +70,6 @@ Thing* Game::GetItemInRoom(string itemName)
             }
         }
     }
+
+    return nullptr;
 }
