@@ -1,22 +1,23 @@
 #ifndef TIMER_H
 #define TIMER_H
-
+#include <ctime>
 
 class Timer
 {
     private:
-        float startTime;
-        float endTime;
-        float time;
-        float currentTime;
+        clock_t stopped, started, duration, pauseDuration;
+        bool running, reset;
 
     public:
-        Timer();
-        virtual ~Timer();
-        void setTime(float time);
-        float getTime();
-        float startTime();
-        float endTime();
-};
+        Timer(bool running);
+        bool isStarted();
+        void startTime();
+        void stopTime();
 
+        clock_t pause();
+        clock_t unPause();
+
+        clock_t doTimer(running, reset);
+        void resetTimer();
+};
 #endif // TIMER_H
