@@ -508,7 +508,6 @@ bool ChatParser::Throw(string throwMe, string hitMe)
     if(temp->isBreakable == true){
     //if true - do nothing!
         cout << "it's broke, don't throw! Bahahahahahahaha" << endl;
-        //delete the copy
         return false;
     }
     //if false - add copy to room
@@ -528,7 +527,17 @@ bool ChatParser::Move(string dir)
 
 bool ChatParser::Use(string useMe)
 {
+    Thing* temp = game->inventory->GetItem(useMe);
 
+    if (temp != nullptr)
+    {
+        game->inventory->useItem(useMe);
+        cout << "You used: " << useMe << "!" << endl;
+    }
+    else
+    {
+        cout << "You don't have the " << useMe << "." << endl;
+    }
     return true;
 }
 
@@ -645,13 +654,33 @@ bool ChatParser::Open(string openMe)
 
 bool ChatParser::Read(string readMe)
 {
+    Thing* temp = game->inventory->GetItem(readMe);
+    if (temp->isReadable == true)
+        cout << temp->description << endl;
+
+    else
+        return false;
 
     return true;
 }
 
 bool ChatParser::Put(string putMe, string fillMe)
 {
+    auto* tempPut = game->inventory->GetItem(putMe);
+    auto* tempFill = game->currentRoom->contents[fillMe];
 
+    if(tempFill->isContainer){
+            if(!tempFill->isOpen){
+                tempFill->isOpen = true;
+                if(tempFill->capacity >= tempPut->size){
+                    tempFill->add(tempPut);
+                    game->inventory->remove(putMe, 1);
+                }
+                else{
+                    cout << fillMe << "does not have enough room" << endl;
+                }
+            }
+    }
     return true;
 }
 

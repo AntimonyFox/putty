@@ -30,39 +30,39 @@ class ChatParser
         static void ExamineAll();
 
         //Steve
-        static bool Throw(string throwMe, string hitMe);
+        static bool Throw(string throwMe, string hitMe); //done
         static bool Move(string dir);
         static bool Use(string useMe);
         static bool Use(string useMe, string onMe);
-        static bool Drop(string dropMe);
-        static bool Take(string takeMe);
-        static bool Open(string openMe);
-        static bool Read(string readMe);
+        static bool Drop(string dropMe); // done
+        static bool Take(string takeMe); // done
+        static bool Open(string openMe); //done
+        static bool Read(string readMe); //wip
         static bool Put(string putMe, string fillMe);
 
         //Victor
-        static bool Drink(string drinkMe);
-        static bool Turn(string turnMe);
-        static bool Turn(string turnMe, string on);
-        static bool MoveObj(string moveMe);
-        static bool Attack(string attackMe, string attackWithMe);
-        static bool Examine(string examineMe);
-        static bool Eat(string eatMe);
-        static bool Close(string closeMe);
-        static bool Tie(string tieMe, string toMe);
-        static bool Break(string breakMe, string withMe);
+        static bool Drink(string drinkMe); //done
+        static bool Turn(string turnMe); //done
+        static bool Turn(string turnMe, string on); //done
+        static bool MoveObj(string moveMe); //done
+        static bool Attack(string attackMe, string attackWithMe); //done
+        static bool Examine(string examineMe); //done
+        static bool Eat(string eatMe); //done
+        static bool Close(string closeMe); //done
+        static bool Tie(string tieMe, string toMe); //done
+        static bool Break(string breakMe, string withMe); //done
 
         //Fox
-        static bool Jump();
-        static bool Pray();
-        static bool Diagnose();
-        static bool Shout();
-        static bool Destroy(string destroyMe);
-        static bool Swap(string swapMe, string withMe);
-        static bool LookAt(string lookAtMe);
-        static bool Save(string state);
-        static bool Restore(string state);
-        weak_ptr<int> currentRoom;
+        static bool Jump(); //done
+        static bool Pray(); //done
+        static bool Diagnose(); //done
+        static bool Shout(); //done
+        static bool Destroy(string destroyMe); //wip
+        static bool Swap(string swapMe, string withMe);//wip
+        static bool LookAt(string lookAtMe); //done
+        static bool Save(string state); //wip
+        static bool Restore(string state); //wip
+        weak_ptr<int> currentRoom; //done
 
         static string lookAlias[3];
         static string inventoryAlias[3];

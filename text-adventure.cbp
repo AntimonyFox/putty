@@ -5,7 +5,7 @@
 		<Option title="text-adventure" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="Headers\;" />
+		<Option virtualFolders="Headers/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/text-adventure" prefix_auto="1" extension_auto="1" />
@@ -41,6 +41,8 @@
 		<Unit filename="include/PuttyParser.h" />
 		<Unit filename="include/Room.h" />
 		<Unit filename="include/Thing.h" />
+		<Unit filename="include/Timer.h" />
+		<Unit filename="include/Updatable.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/ChatParser.cpp" />
 		<Unit filename="src/Container.cpp" />
@@ -48,6 +50,8 @@
 		<Unit filename="src/PuttyParser.cpp" />
 		<Unit filename="src/Room.cpp" />
 		<Unit filename="src/Thing.cpp" />
+		<Unit filename="src/Timer.cpp" />
+		<Unit filename="src/Updatable.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
