@@ -7,7 +7,7 @@ bool Timer::Timer(){
     Timer.started = clock();
     Timer.stopped = Time.started;
     Timer.duration = Timer.stopped - Timer.started;
-    Timere.pauseDuration = Timer.duration;
+    Timer.pauseDuration = Timer.duration;
 }
 
 bool Timer::isStarted(){
