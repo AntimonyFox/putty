@@ -27,7 +27,7 @@ void Timer::stopTime(){
         stopped = clock();
 }
 
-clock_t Timer::doTimer(running, reset){
+clock_t Timer::doTimer(){
     if(!running){
         duration = stopped - started;
         return duration + pauseDuration;
@@ -51,4 +51,9 @@ clock_t Timer::unPause(){
     if(!running){
         startTime();
     }
+}
+
+void Timer::update(clock_t specifiedDuration){
+    if (duration > specifiedDuration)
+        timerFunction();
 }

@@ -1,8 +1,9 @@
 #ifndef TIMER_H
 #define TIMER_H
 #include <ctime>
+#include "Updatable.h"
 
-class Timer
+class Timer : public Updatable
 {
     private:
         clock_t stopped, started, duration, pauseDuration;
@@ -17,7 +18,10 @@ class Timer
         clock_t pause();
         clock_t unPause();
 
-        clock_t doTimer(running, reset);
+        clock_t doTimer();
         void resetTimer();
+
+        virtual void timerFunction() = 0;
+        virtual void update(clock_t duration);
 };
 #endif // TIMER_H
