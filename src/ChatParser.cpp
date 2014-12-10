@@ -521,7 +521,25 @@ bool ChatParser::Throw(string throwMe, string hitMe)
 
 bool ChatParser::Move(string dir)
 {
+    shared_ptr<Room> room(game->currentRoom);
+    if (dir == "north" && room->north) {
+        game->currentRoom = room->north;
+    } else if (dir == "south" && room->south) {
+        game->currentRoom = room->south;
+    } else if (dir == "west" && room->west) {
+        game->currentRoom = room->west;
+    } else if (dir == "east" && room->east) {
+        game->currentRoom = room->east;
+    } else if (dir == "up" && room->up) {
+        game->currentRoom = room->up;
+    } else if (dir == "down" && room->down) {
+        game->currentRoom = room->down;
+    } else {
+        cout << "You can't go that way." << endl;
+        return false;
+    }
 
+    game->currentRoom->look();
     return true;
 }
 

@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <map>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -24,6 +25,12 @@ class Room : public Updatable
         string name;
         string description;
         vector<Timer> timers;
+        shared_ptr<Room> north;
+        shared_ptr<Room> south;
+        shared_ptr<Room> east;
+        shared_ptr<Room> west;
+        shared_ptr<Room> up;
+        shared_ptr<Room> down;
 
         //Dynamic
         map<string, Thing*> contents;
@@ -34,6 +41,12 @@ class Room : public Updatable
 
     private:
         vector<string> contentNames;
+        string northName;
+        string southName;
+        string westName;
+        string eastName;
+        string upName;
+        string downName;
 };
 
 #endif // ROOM_H

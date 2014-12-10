@@ -21,13 +21,13 @@ class Game : public Updatable
     private:
         //Static
         string startingRoom;
-        map<string, Room*> rooms;
+        map<string, shared_ptr<Room>> rooms;
         map<string, Thing*> things;
         vector<Timer> timers;
 
         //Dynamic
         Container *inventory;
-        Room *currentRoom;
+        shared_ptr<Room> currentRoom;
         bool isLoaded;
         bool canAttack = true;
 

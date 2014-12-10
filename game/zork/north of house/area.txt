@@ -2,4 +2,7 @@ description: "You are facing the north side of a white house. There is no door h
 
 reminder: "The windows are all boarded."
 
-contains: windows, white house
+contains: windows, "white house"
+
+west: "west of house"
+east: "behind house"
