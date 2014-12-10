@@ -17,7 +17,7 @@ class Timer
         clock_t pause();
         clock_t unPause();
 
-        clock_t doTimer(running, reset);
+        clock_t doTimer();
         void resetTimer();
 };
 #endif // TIMER_H
