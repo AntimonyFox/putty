@@ -9,6 +9,7 @@ class Updatable
         bool needUpdate;
     public:
         Updatable();
+        ~Updatable();
         virtual void update() = 0;
 
 };

@@ -673,7 +673,7 @@ bool ChatParser::Put(string putMe, string fillMe)
             if(!tempFill->isOpen){
                 tempFill->isOpen = true;
                 if(tempFill->capacity >= tempPut->size){
-                    tempFill->add(tempPut);
+                    tempFill->contents[fillMe] = tempPut;
                     game->inventory->remove(putMe, 1);
                 }
                 else{
