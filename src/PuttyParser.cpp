@@ -92,7 +92,7 @@ void PuttyParser::ParseRoom(string path, Game *game)
     string slug = path.substr(0,path.rfind("/area.txt"));
     slug = slug.substr(slug.rfind("/")+1);
 
-    Room *room = new Room();
+    shared_ptr<Room> room = make_shared<Room>();
     room->name = BookTitle(slug);
 
     fstream in(path);
@@ -113,6 +113,18 @@ void PuttyParser::ParseRoom(string path, Game *game)
                     room->description = word;
                 else if (command == "contains")
                     room->contentNames.push_back(word);
+                else if (command == "north")
+                    room->northName = word;
+                else if (command == "south")
+                    room->southName = word;
+                else if (command == "west")
+                    room->westName = word;
+                else if (command == "east")
+                    room->eastName = word;
+                else if (command == "up")
+                    room->upName = word;
+                else if (command == "down")
+                    room->downName = word;
             }
 
         }
@@ -190,17 +202,37 @@ void PuttyParser::InflateThings(Game *game)
             thing.second->contents[content] = game->things[content];
         }
     }
+    //TODO: delete list when done
 }
 
 void PuttyParser::InflateRooms(Game *game)
 {
-    for (auto room : game->rooms)
+    for (auto r : game->rooms)
     {
-        for (auto content : room.second->contentNames)
+        auto room = r.second;
+        for (auto content : room->contentNames)
         {
-            room.second->contents[content] = game->things[content];
+            if (game->things.count(content)) {
+                room->contents[content] = game->things[content];
+            } else {
+                cout << "ERROR: The item \"" << content << "\" doesn't exist." << endl;
+                cout << "Referenced in room \"" << r.first << "\"" << endl;
+            }
         }
+        if (room->northName != "")
+            room->north = game->rooms[room->northName];
+        if (room->southName != "")
+            room->south = game->rooms[room->southName];
+        if (room->westName != "")
+            room->west = game->rooms[room->westName];
+        if (room->eastName != "")
+            room->east = game->rooms[room->eastName];
+        if (room->upName != "")
+            room->up = game->rooms[room->upName];
+        if (room->downName != "")
+            room->down = game->rooms[room->downName];
     }
+    //TODO: delete list when done
 }
 
 string PuttyParser::GetWord(istringstream *iss)

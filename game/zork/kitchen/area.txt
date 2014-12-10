@@ -1,5 +1,5 @@
 description: "You are in the kitchen of the white house. A table seems to have been user recently for the preparation of food. A passage leads to the west and a dark staircase can be seen leading upward. A dark chimney leads down and to the east is a small window which is open."
 
-contains: window, white house
+contains: window, "white house"
 
 ::go west: enter window

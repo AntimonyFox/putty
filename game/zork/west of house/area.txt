@@ -1,3 +1,6 @@
 description: "You are standing in an open field west of a white house, with a boarded front door."
 
 contains: mailbox, house, door
+
+north: "north of house"
+south: "south of house"

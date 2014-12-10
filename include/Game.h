@@ -19,12 +19,12 @@ class Game
     private:
         //Static
         string startingRoom;
-        map<string, Room*> rooms;
+        map<string, shared_ptr<Room>> rooms;
         map<string, Thing*> things;
 
         //Dynamic
         Container *inventory;
-        Room *currentRoom;
+        shared_ptr<Room> currentRoom;
         bool isLoaded;
 
         //Functions
