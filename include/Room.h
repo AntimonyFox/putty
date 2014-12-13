@@ -36,7 +36,7 @@ class Room : public Updatable
         map<string, Thing*> contents;
 
         //Functions
-        void look();
+        string look();
         void print();
 
     private:

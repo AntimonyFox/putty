@@ -15,8 +15,9 @@ Room::~Room()
     //dtor
 }
 
-void safePrint(string content, int *row)
+string safePrint(string content, int *row)
 {
+    string output = "";
     if (content != "")
     {
         istringstream iss(content);
@@ -28,28 +29,31 @@ void safePrint(string content, int *row)
             col += word.length();
             if (col > MAX_COLS)
             {
-                cout << endl;
+                output += "\n";
                 (*row)++;
                 col = 0;
             }
-            cout << word << " ";
+            output += word + " ";
             col++;
         }
     }
-    cout << endl;
+    output += "\n";
     (*row)++;
+    return output;
 }
 
-void Room::look()
+string Room::look()
 {
+    string output = "";
     int row = 0;
-    safePrint(name, &row);
-    safePrint(description, &row);
+    output += safePrint(name, &row);
+    output += safePrint(description, &row);
     for (auto item : contents)
         if (item.second->isFree)
-            safePrint("There is " + item.second->ArticleName() + " here.", &row);
+            output += safePrint("There is " + item.second->filename + " here.", &row);
 //    for (int i = row; i < MAX_ROWS-1; i++)
 //        cout << endl;
+    return output;
 }
 
 void Room::print()

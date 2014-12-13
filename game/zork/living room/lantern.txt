@@ -5,6 +5,6 @@ description-untouched: "A battery-powered brass lantern is on the trophy case."
 
 isFree
 size: 6
-isOperable
+isToggleable
 
 ::throw: "The lamp has smashed into the floor, and the light has gone out.", swap: broken lantern

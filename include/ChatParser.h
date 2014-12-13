@@ -16,57 +16,55 @@ using namespace std;
 class ChatParser
 {
     public:
-        vector<string> static Parse(string parseMe);
+        static string Parse(string parseMe);
         static Game *game;
 
         static void Init(Game *game);
-        static void ChatError();
-        static void NoText();
+        static string ChatError();
+        static string NoText();
 
-        static void Look();
-        static void Inventory();
+        static string Look();
+        static string Inventory();
         static void TakeAll();
         static void DropAll();
         static void ExamineAll();
 
         //Steve
         static bool Throw(string throwMe, string hitMe); //done
-        static bool Move(string dir);
+        static string Move(string dir);
         static bool Use(string useMe);
         static bool Use(string useMe, string onMe);
-        static bool Drop(string dropMe); // done
-        static bool Take(string takeMe); // done
-        static bool Open(string openMe); //done
-        static bool Read(string readMe); //wip
+        static string Drop(Thing *dropMe); // done
+        static string Take(Thing *takeMe); // done
+        static string Open(Thing *openMe); //done
+        static string Read(Thing *readMe); //wip
         static bool Put(string putMe, string fillMe);
 
         //Victor
-        static bool Drink(string drinkMe); //done
+        static string Drink(Thing *drinkMe); //done
         static bool Turn(string turnMe); //done
-        static bool Turn(string turnMe, string on); //done
-        static bool MoveObj(string moveMe); //done
+        static string Turn(Thing *turnMe, bool on); //done
+        static string MoveObj(Thing *moveMe); //done
         static bool Attack(string attackMe, string attackWithMe); //done
-        static bool Examine(string examineMe); //done
-        static bool Eat(string eatMe); //done
-        static bool Close(string closeMe); //done
+        static string Examine(Thing *examineMe); //done
+        static string Eat(Thing *eatMe); //done
+        static string Close(Thing *closeMe); //done
         static bool Tie(string tieMe, string toMe); //done
         static bool Break(string breakMe, string withMe); //done
 
         //Fox
-        static bool Jump(); //done
-        static bool Pray(); //done
-        static bool Diagnose(); //done
-        static bool Shout(); //done
+        static string Jump(); //done
+        static string Pray(); //done
+        static string Diagnose(); //done
+        static string Shout(); //done
         static bool Destroy(string destroyMe); //wip
         static bool Swap(string swapMe, string withMe);//wip
-        static bool LookAt(string lookAtMe); //done
         static bool Save(string state); //wip
         static bool Restore(string state); //wip
         weak_ptr<int> currentRoom; //done
 
         static string lookAlias[3];
         static string inventoryAlias[3];
-
         static string moveAlias[3];
         static string northAlias[2];
         static string eastAlias[2];
@@ -102,6 +100,11 @@ class ChatParser
         static string restoreAlias[2];
 
         static map<string, string> aliasMap;
+    private:
+        static string DetermineCommand(vector<string> * arguments);
+        static vector<Thing*> DeterminePossibleThings(vector<string> * arguments);
+        static bool RoomHasThing(Thing *thing);
+        static bool InventoryHasThing(Thing *thing);
 };
 
 #endif // CHATPARSER_H

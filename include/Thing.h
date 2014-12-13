@@ -6,6 +6,7 @@
 #include <vector>
 #include "Timer.h"
 #include "Updatable.h"
+#include <sstream>
 
 using namespace std;
 
@@ -28,21 +29,29 @@ class Thing : public Updatable
 
         //Dynamic
         map<string, Thing*> contents;
+        Thing *hides;
+        bool isOn = false;
         bool isOpen = false;
+        bool isMoved = false;
         bool isLocked = false;
         bool isFree = false;
+        bool isEdible = false;
+        bool isDrinkable = false;
         bool isReadable = false;
+        bool isMovable = false;
         bool isAnchored = false;
         bool isContainer = false;
         bool isBreakable = false;
+        bool isToggleable = false;
 
         //Functions
-        void Look();
+        string Look();
         string GetName();
         string ArticleName();
 
     private:
         vector<string> contentNames;
+        string hidesName;
 };
 
 #endif // THING_H

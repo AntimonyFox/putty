@@ -27,7 +27,7 @@ class Container
         Thing* GetItem(string itemName);
         int GetQuantity(string itemName);
         bool IsEmpty();
-        void printContainer();
+        string printContainer();
         ContainerTable *container;
 };
 #endif // CONTAINER_H

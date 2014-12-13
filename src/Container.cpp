@@ -85,7 +85,13 @@ bool Container::IsEmpty()
     return container->empty();
 }
 
-void Container::printContainer(){
-    for ( auto key : *container)
-        cout << key.first << " " << key.second.itemQuantity << endl;
+string Container::printContainer()
+{
+    string output = "";
+    for (auto key : *container) {
+        stringstream iss;
+        iss << key.second.itemQuantity;
+        output += key.first + " " + iss.str() + "\n";
+    }
+    return output;
 }

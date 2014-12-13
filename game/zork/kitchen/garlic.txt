@@ -1,0 +1,6 @@
+appearance: "clove of garlic"
+
+isFree
+size: 2
+
+::eat: "What the heck! You won't make friends this way, but nobody around here s too friendly anyhow. Gulp!", destroy

@@ -157,18 +157,28 @@ void PuttyParser::ParseThing(string path, Game *game)
                 if (command == "")
                 {
                     command = word;
-                    if (command == "isLocked")
+                    if (command == "isOn")
+                        thing->isOn = true;
+                    else if (command == "isLocked")
                         thing->isLocked = true;
                     else if (command == "isFree")
                         thing->isFree = true;
                     else if (command == "isReadable")
                         thing->isReadable = true;
+                    else if (command == "isMovable")
+                        thing->isMovable = true;
                     else if (command == "isAnchored")
                         thing->isAnchored = true;
                     else if (command == "isContainer")
                         thing->isContainer = true;
                     else if (command == "isBreakable")
                         thing->isBreakable = true;
+                    else if (command == "isToggleable")
+                        thing->isToggleable = true;
+                    else if (command == "isDrinkable")
+                        thing->isDrinkable = true;
+                    else if (command == "isEdible")
+                        thing->isEdible = true;
                 }
                 else
                 {
@@ -184,10 +194,26 @@ void PuttyParser::ParseThing(string path, Game *game)
                         thing->capacity = atoi(word.c_str());
                     else if (command == "name")
                         thing->name += (thing->name == "") ? word : " " + word;
+                    else if (command == "hides")
+                        thing->hidesName += (thing->hidesName == "") ? word : " " + word;
                 }
             }
         }
         command = "";
+    }
+    istringstream iss(thing->filename);
+    while (iss)
+    {
+        word = GetWord((&iss));
+        thing->keywords.push_back(word);
+    }
+    if (thing->name != "") {
+        istringstream iss2(thing->name);
+        while (iss2)
+        {
+            word = GetWord((&iss2));
+            thing->keywords.push_back(word);
+        }
     }
     game->things[slug] = thing;
     in.close();
@@ -195,11 +221,27 @@ void PuttyParser::ParseThing(string path, Game *game)
 
 void PuttyParser::InflateThings(Game *game)
 {
-    for (auto thing : game->things)
+    for (auto thingPair : game->things)
     {
-        for (auto content : thing.second->contentNames)
+        Thing *thing = thingPair.second;
+        for (auto content : thing->contentNames)
         {
-            thing.second->contents[content] = game->things[content];
+            if (game->things.count(content)) {
+                thing->contents[content] = game->things[content];
+            } else {
+                game->hasError = true;
+                cout << "ERROR: the item \"" << content << "\" doesn't exist." << endl;
+                cout << "Referenced in item \"" << thingPair.first << "\"" << endl;
+            }
+        }
+        if (thing->hidesName != "") {
+            if (game->things.count(thing->hidesName)) {
+                thing->hides = game->things[thing->hidesName];
+            } else {
+                game->hasError = true;
+                cout << "ERROR: the item \"" << thing->hidesName << "\" doesn't exist." << endl;
+                cout << "Referenced in item \"" << thingPair.first << "\"" << endl;
+            }
         }
     }
     //TODO: delete list when done
@@ -215,6 +257,7 @@ void PuttyParser::InflateRooms(Game *game)
             if (game->things.count(content)) {
                 room->contents[content] = game->things[content];
             } else {
+                game->hasError = true;
                 cout << "ERROR: The item \"" << content << "\" doesn't exist." << endl;
                 cout << "Referenced in room \"" << r.first << "\"" << endl;
             }
@@ -248,13 +291,13 @@ string PuttyParser::GetWord(istringstream *iss)
         {
             if (c == '"')
                 word += '"';
-            else if (c == '/')
-                word += '/';
+            else if (c == '\\')
+                word += '\\';
             else if (c == 'n')
                 word += '\n';
             isEscaping = false;
         }
-        else if (c == '/')
+        else if (c == '\\')
             isEscaping = true;
         else if (c == '"')
             inQuotes ^= true;

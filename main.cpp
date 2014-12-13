@@ -8,7 +8,7 @@ using namespace std;
 
 int main()
 {
-    Game game("/Users/stevenchitwood/Documents/Cogswell/Classes/AdvanceC++/TextBasedGameProject/putty/game/zork");
+    Game game("game/zork");
     game.Start();
 
 //    Inventory inventory;                        // create inventory

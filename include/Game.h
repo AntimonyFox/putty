@@ -29,7 +29,11 @@ class Game : public Updatable
         Container *inventory;
         shared_ptr<Room> currentRoom;
         bool isLoaded;
+<<<<<<< HEAD
         bool canAttack = true;
+=======
+        bool hasError;
+>>>>>>> Keywords added, ChatParser strings
 
         //Functions
         Thing *GetItem(string itemName);

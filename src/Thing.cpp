@@ -26,46 +26,56 @@ string Thing::ArticleName()
     return article + " " + n;
 }
 
-void Thing::Look()
+string Thing::Look()
 {
-    cout << " "; for (int i = 0; i < filename.length()+2; i++) cout << "-"; cout << endl;
-    cout << "| " << filename << " |" << endl;
+    string output = "";
+    output += " "; for (int i = 0; i < filename.length()+2; i++) output += "-"; output += "\n";
+    output += "| " + filename + " |" + "\n";
     if (name != "")
-        cout << name << endl;
-    cout << " "; for (int i = 0; i < filename.length()+2; i++) cout << "-"; cout << endl;
+        output += name + "\n";
+    output += " "; for (int i = 0; i < filename.length()+2; i++) output += "-"; output += "\n";
 
     if (!keywords.empty())
     {
-        cout << "Keywords:\t";
+        output += "Keywords:\t";
         for (string keyword : keywords)
-            cout << keyword << " ";
-        cout << endl;
+            output += keyword + " ";
+        output += "\n";
     }
 
     if (!contents.empty())
     {
-        cout << "Contents:\t";
+        output += "Contents:\t";
         for (string content : contentNames)
-            cout << content << ", ";
-        cout << endl;
+            output += content + ", ";
+        output += "\n";
     }
 
     if (description != "")
-        cout << endl << "=====" << endl << description << endl << "=====" << endl << endl;
+        output += "\n=====\n" + description + "\n=====\n\n";
 
     if (size != -1)
-        cout << "Size: " << size << endl;
+    {
+        stringstream iss;
+        iss << size;
+        output += "Size: " + iss.str() + "\n";
+    }
 
-    cout << "Properties: " << endl;
+    output += "Properties:\n";
     if (isContainer)
-        cout << "\tisContainer (capacity: " << capacity << ") " << endl;
-    if (isLocked) cout << "\tisLocked " << endl;
-    if (isFree) cout << "\tisFree " << endl;
-    if (isReadable) cout << "\tisReadable " << endl;
-    if (isAnchored) cout << "\tisAnchored " << endl;
-    cout << endl;
+    {
+        stringstream iss;
+        iss << capacity;
+        output += "\tisContainer (capacity: " + iss.str() + ")\n";
+    }
+    if (isLocked) output += "\tisLocked\n";
+    if (isFree) output += "\tisFree\n";
+    if (isReadable) output += "\tisReadable\n";
+    if (isAnchored) output += "\tisAnchored\n";
+    output += "\n";
 
-    cout << "----------------------------------------" << endl;
+    output += "----------------------------------------\n";
+    return output;
 }
 
 void update(){

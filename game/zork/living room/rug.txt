@@ -1,4 +1,4 @@
-name: large oriental rug
+keywords: large oriental carpet
 
 isFree
 isAnchored
