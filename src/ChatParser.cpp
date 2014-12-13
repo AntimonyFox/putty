@@ -40,8 +40,10 @@ string ChatParser::saveAlias[1] = {"save"};
 string ChatParser::restoreAlias[2] = {"restore", "load"};
 
 map<string, string> ChatParser::aliasMap = map<string, string>();
-
+mutex ChatParser::cMutex;
+vector<thread> ChatParser::threadList = vector<thread>();
 Game* ChatParser::game;
+
 void ChatParser::Init(Game *game)
 {
     ChatParser::game = game;
@@ -82,6 +84,7 @@ void ChatParser::Init(Game *game)
     ADDARRAY("save", saveAlias);
     ADDARRAY("restore", restoreAlias);
 
+    StartServer();
 }
 
 string ToLower(string lowerMe)
@@ -327,7 +330,7 @@ bool IsPossibleThing(Thing *thing, vector<string> * arguments)
     return isPossibleThing;
 }
 
-vector<Thing*> ChatParser::DeterminePossibleThings(vector<string> * arguments)
+vector<Thing*> ChatParser::DeterminePossibleThings(Player* p, vector<string> * arguments)
 {
     vector<Thing*> possThings;
     if (!arguments->empty()) {
@@ -341,9 +344,9 @@ vector<Thing*> ChatParser::DeterminePossibleThings(vector<string> * arguments)
     return possThings;
 }
 
-bool ChatParser::RoomHasThing(Thing *thing)
+bool ChatParser::RoomHasThing(Player* p, Thing *thing)
 {
-    shared_ptr<Room> room = game->currentRoom;
+    shared_ptr<Room> room = p->currentRoom;
 
     for (auto roomPair : room->contents) {
         Thing *roomThing = roomPair.second;
@@ -361,12 +364,12 @@ bool ChatParser::RoomHasThing(Thing *thing)
     return false;
 }
 
-bool ChatParser::InventoryHasThing(Thing *thing)
+bool ChatParser::InventoryHasThing(Player* p, Thing *thing)
 {
-    if (game->inventory->GetItem(thing->filename)) {
+    if (p->inventory->GetItem(thing->filename)) {
         return true;
     } else {
-        for (auto pair : *game->inventory->container) {
+        for (auto pair : *p->inventory->container) {
             Thing *invThing = pair.second.item;
             for (auto innerPair : invThing->contents) {
                 Thing *innerThing = innerPair.second;
@@ -391,12 +394,12 @@ string Implode(vector<string> * arguments, string join)
     return output;
 }
 
-string ChatParser::Parse(string parseMe)
+string ChatParser::Parse(string parseMe, Player* p)
 {
     vector<string> * arguments = StringToArguments(parseMe);
     string al = DetermineCommand(arguments);
     string thingInTheirWords = Implode(arguments, " ");
-    vector<Thing*> possThings = DeterminePossibleThings(arguments);
+    vector<Thing*> possThings = DeterminePossibleThings(p, arguments);
     Thing *thing = !possThings.empty() ? possThings.front() : nullptr;
 
     if(parseMe == "")
@@ -409,11 +412,11 @@ string ChatParser::Parse(string parseMe)
     }
     else if(al == "look")
     {
-        return Look();
+        return Look(p);
     }
     else if(al == "inventory")
     {
-        return Inventory();
+        return Inventory(p);
     }
     else if(
             al == "north" ||
@@ -427,11 +430,11 @@ string ChatParser::Parse(string parseMe)
             al == "up" ||
             al == "down")
     {
-        return Move(al);
+        return Move(p, al);
     }
     else if(al == "move")
     {
-        return Move((*arguments)[0]);
+        return Move(p, (*arguments)[0]);
     }
     else if(al == "pray")
     {
@@ -464,51 +467,51 @@ string ChatParser::Parse(string parseMe)
     //Must be holding item
     else if(al == "drop")
     {
-        return Drop(thing);
+        return Drop(p, thing);
     }
-    else if (!RoomHasThing(thing) && !InventoryHasThing(thing))
+    else if (!RoomHasThing(p, thing) && !InventoryHasThing(p, thing))
     {
         return "You can't see any " + thingInTheirWords + " here!\n";
     }
     else if(al == "take")
     {
-        return Take(thing);
+        return Take(p, thing);
     }
     else if(al == "examine")
     {
-        return Examine(thing);
+        return Examine(p, thing);
     }
     else if(al == "open")
     {
-        return Open(thing);
+        return Open(p, thing);
     }
     else if(al == "drink")
     {
-        return Drink(thing);
+        return Drink(p, thing);
     }
     else if(al == "read")
     {
-        return Read(thing);
+        return Read(p, thing);
     }
     else if(al == "turn on")
     {
-        return Turn(thing, true);
+        return Turn(p, thing, true);
     }
     else if(al == "turn off")
     {
-        return Turn(thing, false);
+        return Turn(p, thing, false);
     }
     else if(al == "moveobj")
     {
-        return MoveObj(thing);
+        return MoveObj(p, thing);
     }
     else if(al == "eat")
     {
-        return Eat(thing);
+        return Eat(p, thing);
     }
     else if(al == "close")
     {
-        return Close(thing);
+        return Close(p, thing);
     }
 //    else if(al == "destroy")
 //    {
@@ -539,41 +542,41 @@ string ChatParser::Parse(string parseMe)
     return "";
 }
 
-string ChatParser::Look()
+string ChatParser::Look(Player* p)
 {
-    return game->currentRoom->look();
+    return p->currentRoom->look();
 }
 
-string ChatParser::Inventory()
+string ChatParser::Inventory(Player* p)
 {
-    if (!game->inventory->IsEmpty())
-        return game->inventory->printContainer();
+    if (!p->inventory->IsEmpty())
+        return p->inventory->printContainer();
     else
         return "You are empty-handed.\n";
 }
 
-void ChatParser::TakeAll()
+void ChatParser::TakeAll(Player* p)
 {
 
 }
 
-void ChatParser::DropAll()
+void ChatParser::DropAll(Player* p)
 {
 
 }
 
-void ChatParser::ExamineAll()
+void ChatParser::ExamineAll(Player* p)
 {
 
 }
 
-bool ChatParser::Throw(string throwMe, string hitMe)
+bool ChatParser::Throw(Player* p, string throwMe, string hitMe)
 {
     //copy item as temp (for room)
     //Thing temp = throwMe;
-    Thing* temp = game->inventory->GetItem(throwMe);
+    Thing* temp = p->inventory->GetItem(throwMe);
     //remove item from Inventory
-    game->inventory->remove(throwMe, 1);
+    p->inventory->remove(throwMe, 1);
 
     //check if breakable
     if(temp->isBreakable == true){
@@ -584,41 +587,41 @@ bool ChatParser::Throw(string throwMe, string hitMe)
     //if false - add copy to room
     else{
         cout << "You throw the " << throwMe << " at the " << hitMe << "." << endl;
-        game->currentRoom->contents[throwMe] = temp;
+        p->currentRoom->contents[throwMe] = temp;
         return true;
     }
     return true;
 }
 
-string ChatParser::Move(string dir)
+string ChatParser::Move(Player* p, string dir)
 {
-    shared_ptr<Room> room(game->currentRoom);
+    shared_ptr<Room> room(p->currentRoom);
     if (dir == "north" && room->north) {
-        game->currentRoom = room->north;
+        p->currentRoom = room->north;
     } else if (dir == "south" && room->south) {
-        game->currentRoom = room->south;
+        p->currentRoom = room->south;
     } else if (dir == "west" && room->west) {
-        game->currentRoom = room->west;
+        p->currentRoom = room->west;
     } else if (dir == "east" && room->east) {
-        game->currentRoom = room->east;
+        p->currentRoom = room->east;
     } else if (dir == "up" && room->up) {
-        game->currentRoom = room->up;
+        p->currentRoom = room->up;
     } else if (dir == "down" && room->down) {
-        game->currentRoom = room->down;
+        p->currentRoom = room->down;
     } else {
         return "You can't go that way.\n";
     }
 
-    return game->currentRoom->look();
+    return p->currentRoom->look();
 }
 
-bool ChatParser::Use(string useMe)
+bool ChatParser::Use(Player* p, string useMe)
 {
-    Thing* temp = game->inventory->GetItem(useMe);
+    Thing* temp = p->inventory->GetItem(useMe);
 
     if (temp != nullptr)
     {
-        game->inventory->useItem(useMe);
+        p->inventory->useItem(useMe);
         cout << "You used: " << useMe << "!" << endl;
     }
     else
@@ -628,26 +631,26 @@ bool ChatParser::Use(string useMe)
     return true;
 }
 
-bool ChatParser::Use(string useMe, string onMe)
+bool ChatParser::Use(Player* p, string useMe, string onMe)
 {
 
     return true;
 }
 
-string ChatParser::Drop(Thing *dropMe)
+string ChatParser::Drop(Player* p, Thing *dropMe)
 {
-    if (game->inventory->GetItem(dropMe->filename)) {
-        game->inventory->remove(dropMe->filename, 1);
-        game->currentRoom->contents[dropMe->filename] = dropMe;
+    if (p->inventory->GetItem(dropMe->filename)) {
+        p->inventory->remove(dropMe->filename, 1);
+        p->currentRoom->contents[dropMe->filename] = dropMe;
         return "Dropped.\n";
     } else {
         return "You don't have that!\n";
     }
 }
 
-string ChatParser::Take(Thing *takeMe)
+string ChatParser::Take(Player* p, Thing *takeMe)
 {
-    if (InventoryHasThing(takeMe))
+    if (InventoryHasThing(p, takeMe))
     {
         return "You already have that!\n";
     }
@@ -661,7 +664,7 @@ string ChatParser::Take(Thing *takeMe)
     }
     else
     {
-        shared_ptr<Room> room = game->currentRoom;
+        shared_ptr<Room> room = p->currentRoom;
         for (auto roomPair : room->contents)
         {
             Thing *roomThing = roomPair.second;
@@ -683,14 +686,14 @@ string ChatParser::Take(Thing *takeMe)
                 }
             }
         }
-        game->inventory->add(takeMe);
+        p->inventory->add(takeMe);
         return "Taken.\n";
     }
 }
 
-string ChatParser::Open(Thing *openMe)
+string ChatParser::Open(Player* p, Thing *openMe)
 {
-    shared_ptr<Room> room = game->currentRoom;
+    shared_ptr<Room> room = p->currentRoom;
 
     if (openMe->isContainer)
     {
@@ -729,13 +732,13 @@ string ChatParser::Open(Thing *openMe)
     }
 }
 
-string ChatParser::Read(Thing *readMe)
+string ChatParser::Read(Player* p, Thing *readMe)
 {
     string output = "";
     if (readMe->isReadable) {
-        if (!InventoryHasThing(readMe)) {
-            Take(readMe);
-            if (InventoryHasThing(readMe)) {
+        if (!InventoryHasThing(p, readMe)) {
+            Take(p, readMe);
+            if (InventoryHasThing(p, readMe)) {
                 output += "(Taken).\n";
             }
         }
@@ -746,17 +749,17 @@ string ChatParser::Read(Thing *readMe)
     return output;
 }
 
-bool ChatParser::Put(string putMe, string fillMe)
+bool ChatParser::Put(Player* p, string putMe, string fillMe)
 {
-    auto* tempPut = game->inventory->GetItem(putMe);
-    auto* tempFill = game->currentRoom->contents[fillMe];
+    auto* tempPut = p->inventory->GetItem(putMe);
+    auto* tempFill = p->currentRoom->contents[fillMe];
 
     if(tempFill->isContainer){
             if(!tempFill->isOpen){
                 tempFill->isOpen = true;
                 if(tempFill->capacity >= tempPut->size){
                     tempFill->contents[fillMe] = tempPut;
-                    game->inventory->remove(putMe, 1);
+                    p->inventory->remove(putMe, 1);
                 }
                 else{
                     cout << fillMe << "does not have enough room" << endl;
@@ -766,12 +769,12 @@ bool ChatParser::Put(string putMe, string fillMe)
     return true;
 }
 
-string ChatParser::Drink(Thing *drinkMe)
+string ChatParser::Drink(Player* p, Thing *drinkMe)
 {
     if (!drinkMe->isDrinkable) {
         return "I don't think the " + drinkMe->GetName() + " would agree with you.\n";
     } else {
-        for (auto pair : *game->inventory->container) {
+        for (auto pair : *p->inventory->container) {
             Thing *pairThing = pair.second.item;
             for (auto innerPair : pairThing->contents) {
                 Thing *innerThing = innerPair.second;
@@ -785,7 +788,7 @@ string ChatParser::Drink(Thing *drinkMe)
                 }
             }
         }
-        for (auto pair : game->currentRoom->contents) {
+        for (auto pair : p->currentRoom->contents) {
             Thing *pairThing = pair.second;
             for (auto innerPair : pairThing->contents) {
                 Thing *innerThing = innerPair.second;
@@ -797,7 +800,7 @@ string ChatParser::Drink(Thing *drinkMe)
     }
 }
 
-string ChatParser::Turn(Thing *turnMe, bool on)
+string ChatParser::Turn(Player* p, Thing *turnMe, bool on)
 {
     if (turnMe->isToggleable) {
         if (on && turnMe->isOn) {
@@ -811,15 +814,15 @@ string ChatParser::Turn(Thing *turnMe, bool on)
     }
 }
 
-bool ChatParser::Turn(string turnMe)
+bool ChatParser::Turn(Player* p, string turnMe)
 {
 
     return true;
 }
 
-string ChatParser::MoveObj(Thing *moveMe)
+string ChatParser::MoveObj(Player* p, Thing *moveMe)
 {
-    if (InventoryHasThing(moveMe)) {
+    if (InventoryHasThing(p, moveMe)) {
         return "You're not an accomplished enough juggler.\n";
     } else if (!moveMe->isMovable) {
         return "You can't move the " + moveMe->GetName() + ".\n";
@@ -835,23 +838,23 @@ string ChatParser::MoveObj(Thing *moveMe)
     }
 }
 
-bool ChatParser::Attack(string attackMe, string attackWithMe)
+bool ChatParser::Attack(Player* p, string attackMe, string attackWithMe)
 {
 
     return true;
 }
 
-string ChatParser::Examine(Thing *examineMe)
+string ChatParser::Examine(Player* p, Thing *examineMe)
 {
     return examineMe->Look();
 }
 
-string ChatParser::Eat(Thing *eatMe)
+string ChatParser::Eat(Player* p, Thing *eatMe)
 {
     if (!eatMe->isEdible) {
         return "I don't think the " + eatMe->GetName() + " would agree with you.\n";
     } else {
-        for (auto pair : *game->inventory->container) {
+        for (auto pair : *p->inventory->container) {
             Thing *pairThing = pair.second.item;
             for (auto innerPair : pairThing->contents) {
                 Thing *innerThing = innerPair.second;
@@ -865,7 +868,7 @@ string ChatParser::Eat(Thing *eatMe)
                 }
             }
         }
-        for (auto pair : game->currentRoom->contents) {
+        for (auto pair : p->currentRoom->contents) {
             Thing *pairThing = pair.second;
             for (auto innerPair : pairThing->contents) {
                 Thing *innerThing = innerPair.second;
@@ -877,7 +880,7 @@ string ChatParser::Eat(Thing *eatMe)
     }
 }
 
-string ChatParser::Close(Thing *closeMe)
+string ChatParser::Close(Player* p, Thing *closeMe)
 {
     if (closeMe->isContainer) {
         if (closeMe->isOpen) {
@@ -945,5 +948,157 @@ bool ChatParser::Restore(string state)
 {
 
     return true;
+}
+
+string ChatParser::ProcessCommand(string data, Player* p)
+{
+    unique_lock<mutex> lk(cMutex);
+
+
+    return Parse(data, p);
+}
+
+void ChatParser::ClientThread(SOCKET cSock, char* ip)
+{
+    int iResult = 0;
+    char sendbuf[DEFAULT_BUFLEN] = {0};
+
+
+    Player* myPlayer = game->GetPlayer(ip);
+
+    strcpy(sendbuf, ProcessCommand("look", myPlayer).c_str());
+    send( cSock, sendbuf, sizeof(sendbuf), 0 );
+
+
+
+    do {
+        char recvbuf[DEFAULT_BUFLEN] = {0};
+        sendbuf[DEFAULT_BUFLEN] = {0};
+
+        iResult = recv(cSock, recvbuf, DEFAULT_BUFLEN, 0);
+
+        if (iResult > 0)
+        {
+            printf("Bytes received: %d\n", iResult);
+
+            strcpy(sendbuf, ProcessCommand(recvbuf, myPlayer).c_str());
+
+            send( cSock, sendbuf, sizeof(sendbuf), 0 );
+        }
+        else if (iResult == 0)
+        {
+            printf("Connection closing...\n");
+            break;
+        }
+        else
+        {
+            printf("recv failed with error: %d\n", WSAGetLastError());
+            closesocket(cSock);
+        }
+
+    } while (iResult > 0);
+}
+
+int ChatParser::StartServer()
+{
+
+    WSADATA wsaData;
+    int iResult;
+
+    SOCKET ListenSocket = INVALID_SOCKET;
+    SOCKET ClientSocket = INVALID_SOCKET;
+
+    struct addrinfo *result = NULL;
+    struct addrinfo hints;
+    struct sockaddr_storage Addr;
+
+    int AddrLen;
+    char AddrName[NI_MAXHOST];
+
+    int curID = 0;
+
+
+    // Initialize Winsock
+    iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
+    if (iResult != 0) {
+        printf("WSAStartup failed with error: %d\n", iResult);
+        return 1;
+    }
+
+    ZeroMemory(&hints, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+    hints.ai_flags = AI_PASSIVE;
+
+    // Resolve the server address and port
+    iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
+    if ( iResult != 0 ) {
+        printf("getaddrinfo failed with error: %d\n", iResult);
+        WSACleanup();
+        return 1;
+    }
+
+    // Create a SOCKET for connecting to server
+    ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
+    if (ListenSocket == INVALID_SOCKET)
+        {
+        printf("socket failed with error: %d\n", WSAGetLastError());
+        freeaddrinfo(result);
+        WSACleanup();
+        return 1;
+    }
+
+    // Setup the TCP listening socket
+    iResult = bind( ListenSocket, result->ai_addr, (int)result->ai_addrlen);
+    if (iResult == SOCKET_ERROR) {
+        printf("bind failed with error: %d\n", WSAGetLastError());
+        freeaddrinfo(result);
+        closesocket(ListenSocket);
+        WSACleanup();
+        return 1;
+    }
+
+    freeaddrinfo(result);
+
+    iResult = listen(ListenSocket, SOMAXCONN);
+    if (iResult == SOCKET_ERROR) {
+        printf("listen failed with error: %d\n", WSAGetLastError());
+        closesocket(ListenSocket);
+        WSACleanup();
+        return 1;
+    }
+
+    // Accept a client socket
+    for(;;)
+    {
+        ClientSocket = accept(ListenSocket, NULL, NULL);
+
+        if (ClientSocket != INVALID_SOCKET)
+        {
+            printf("Client Found! ");
+            send( ClientSocket, "sdas", iResult, 0 );
+
+            getpeername(ClientSocket, (LPSOCKADDR)&Addr, &AddrLen);
+            getnameinfo((LPSOCKADDR)&Addr, AddrLen, AddrName, sizeof(AddrName), NULL, 0, NI_NUMERICHOST);
+            cout << "IP: " << AddrName << endl;
+            threadList.push_back(thread(ClientThread, ClientSocket, AddrName) );
+        }
+    }
+
+    // shutdown the connection since we're done
+    iResult = shutdown(ClientSocket, SD_SEND);
+    if (iResult == SOCKET_ERROR) {
+        printf("shutdown failed with error: %d\n", WSAGetLastError());
+        closesocket(ClientSocket);
+        WSACleanup();
+        return 1;
+    }
+
+    // cleanup
+    closesocket(ClientSocket);
+    WSACleanup();
+
+    return 0;
 }
 

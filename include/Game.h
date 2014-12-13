@@ -7,12 +7,23 @@
 #include "Timer.h"
 #include "Updatable.h"
 
+#include <mutex>
 #include <map>
+
+class Player
+{
+    public:
+    shared_ptr<Room> currentRoom;
+    Container *inventory;
+};
+
+using namespace std;
 
 class Game : public Updatable
 {
     friend class PuttyParser;
     friend class ChatParser;
+
     public:
         Game(string path);
         virtual ~Game();
@@ -24,22 +35,23 @@ class Game : public Updatable
         map<string, shared_ptr<Room>> rooms;
         map<string, Thing*> things;
         vector<Timer> timers;
+        mutex ipMutex;
 
         //Dynamic
         Container *inventory;
         shared_ptr<Room> currentRoom;
         bool isLoaded;
-<<<<<<< HEAD
         bool canAttack = true;
-=======
         bool hasError;
->>>>>>> Keywords added, ChatParser strings
+        map<string, Player*> ipMap;
 
         //Functions
         Thing *GetItem(string itemName);
         Thing *GetItemInRoom(string itemName);
 
         void lostGame();
+        Player* CreatePlayer(string ip);
+        Player* GetPlayer(string ip);
 };
 
 #endif // GAME_H
