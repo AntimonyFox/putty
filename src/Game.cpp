@@ -16,18 +16,47 @@ Game::~Game()
     //dtor
 }
 
+Player* Game::CreatePlayer(string ip)
+{
+    Player* p = new Player();
+
+    p->inventory = new Container();
+    p->currentRoom = (startingRoom != "") ? rooms[startingRoom] : rooms.begin()->second;
+
+    ipMap[ip]=p;
+
+    cout << "Player Created!" << endl;
+
+    return p;
+}
+
+Player* Game::GetPlayer(string ip)
+{
+    unique_lock<mutex> lk(ipMutex);
+
+    if (ipMap.find(ip) != ipMap.end())
+    {
+    return ipMap[ip];
+    }
+    else
+    {
+    return CreatePlayer(ip);
+    }
+}
+
 void Game::Start()
 {
     if(isLoaded && !hasError)
     {
         currentRoom = (startingRoom != "") ? rooms[startingRoom] : rooms.begin()->second;
+        ipMap = map<string, Player*>();
 
         //TODO: shouldn't be a pointer
         inventory = new Container();
 
         ChatParser::Init(this);
 
-        cout << ChatParser::Look();
+        /*cout << ChatParser::Look();
 
         string uInput;
         while(true)
@@ -36,7 +65,7 @@ void Game::Start()
             cout << "> ";
             getline(cin, uInput);
             cout << ChatParser::Parse(uInput);
-        }
+        }*/
     }
 }
 
