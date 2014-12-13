@@ -26,6 +26,7 @@ class Game
         Container *inventory;
         shared_ptr<Room> currentRoom;
         bool isLoaded;
+        bool hasError;
 
         //Functions
         Thing *GetItem(string itemName);

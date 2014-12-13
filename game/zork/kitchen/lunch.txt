@@ -1,3 +1,4 @@
+keywords: hot pepper sandwich
 appearance: hot pepper sandwich
 
 isFree

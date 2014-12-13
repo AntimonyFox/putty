@@ -18,17 +18,16 @@ Game::~Game()
 
 void Game::Start()
 {
-    if(isLoaded)
+    if(isLoaded && !hasError)
     {
         currentRoom = (startingRoom != "") ? rooms[startingRoom] : rooms.begin()->second;
 
+        //TODO: shouldn't be a pointer
         inventory = new Container();
-//        inventory->add(GetItem("leaflet"));
-        inventory->printContainer();
 
         ChatParser::Init(this);
 
-        ChatParser::Look();
+        cout << ChatParser::Look();
 
         string uInput;
         while(true)
@@ -36,7 +35,7 @@ void Game::Start()
             cout << endl;
             cout << "> ";
             getline(cin, uInput);
-            ChatParser::Parse(uInput);
+            cout << ChatParser::Parse(uInput);
         }
     }
 }
