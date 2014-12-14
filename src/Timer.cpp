@@ -18,8 +18,10 @@ bool Timer::isStarted(){
 }
 
 void Timer::startTime(){
-    if (!running)
+    if (!running){
         started = clock();
+        running = true;
+    }
 }
 
 void Timer::stopTime(){
@@ -27,10 +29,9 @@ void Timer::stopTime(){
         stopped = clock();
 }
 
-clock_t Timer::doTimer(){
-    if(!running){
-        duration = stopped - started;
-        return duration + pauseDuration;
+clock_t Timer::update(){
+    if ((clock() - startTime) > duration){
+        timerFunction();
     }
 }
 
@@ -53,7 +54,6 @@ clock_t Timer::unPause(){
     }
 }
 
-void Timer::update(clock_t specifiedDuration){
-    if (duration > specifiedDuration)
-        timerFunction();
+void Timer::setDuration(clock_t setDuration){
+    duration = setDuration;
 }

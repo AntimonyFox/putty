@@ -69,3 +69,10 @@ void Room::print()
 
     cout << "----------------------------------------" << endl;
 }
+
+void update(){
+    for (auto timer: timers)
+        timer.update();
+    for (auto thing: things)
+        thing.second.update();
+}

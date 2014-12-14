@@ -67,3 +67,12 @@ void Thing::Look()
 
     cout << "----------------------------------------" << endl;
 }
+
+void update(){
+    for (auto timer: timers)
+        timer.update();
+
+    if (isContainer)
+        for (auto thing: contents)
+            thing.update();
+}

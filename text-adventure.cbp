@@ -38,18 +38,22 @@
 		<Unit filename="include/ChatParser.h" />
 		<Unit filename="include/Container.h" />
 		<Unit filename="include/Game.h" />
+		<Unit filename="include/GameTimer.h" />
 		<Unit filename="include/PuttyParser.h" />
 		<Unit filename="include/Room.h" />
 		<Unit filename="include/Thing.h" />
+		<Unit filename="include/ThingsTimer.h" />
 		<Unit filename="include/Timer.h" />
 		<Unit filename="include/Updatable.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/ChatParser.cpp" />
 		<Unit filename="src/Container.cpp" />
 		<Unit filename="src/Game.cpp" />
+		<Unit filename="src/GameTimer.cpp" />
 		<Unit filename="src/PuttyParser.cpp" />
 		<Unit filename="src/Room.cpp" />
 		<Unit filename="src/Thing.cpp" />
+		<Unit filename="src/ThingsTimer.cpp" />
 		<Unit filename="src/Timer.cpp" />
 		<Unit filename="src/Updatable.cpp" />
 		<Extensions>

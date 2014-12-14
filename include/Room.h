@@ -2,6 +2,8 @@
 #define ROOM_H
 
 #include "Thing.h"
+#include "Timer.h"
+#include "Updatable.h"
 
 #include <iostream>
 #include <map>
@@ -11,7 +13,7 @@
 
 using namespace std;
 
-class Room
+class Room : public Updatable
 {
     friend class PuttyParser;
     public:
@@ -21,6 +23,7 @@ class Room
         //Static
         string name;
         string description;
+        vector<Timer> timers;
 
         //Dynamic
         map<string, Thing*> contents;

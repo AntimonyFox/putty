@@ -31,6 +31,9 @@ void Game::Start()
         ChatParser::Look();
 
         string uInput;
+
+        thread t1(update);
+
         while(true)
         {
             cout << endl;
@@ -70,4 +73,15 @@ Thing* Game::GetItemInRoom(string itemName)
             }
         }
     }
+}
+
+void update(){
+    for (auto timer: timers)
+        timer.update();
+    for (auto room: rooms)
+        room.second.update();
+}
+
+void Game::lostGame(){
+
 }

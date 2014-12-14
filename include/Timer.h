@@ -18,10 +18,11 @@ class Timer : public Updatable
         clock_t pause();
         clock_t unPause();
 
-        clock_t doTimer();
         void resetTimer();
 
         virtual void timerFunction() = 0;
-        virtual void update(clock_t duration);
+        virtual void update();
+
+        void setDuration(clock_t setDuration);
 };
 #endif // TIMER_H

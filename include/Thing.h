@@ -4,10 +4,12 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "Timer.h"
+#include "Updatable.h"
 
 using namespace std;
 
-class Thing
+class Thing : public Updatable
 {
     friend class PuttyParser;
     public:
@@ -22,6 +24,7 @@ class Thing
         string description;
         int size = -1;
         int capacity = 0;
+        vector<Timer> timers;
 
         //Dynamic
         map<string, Thing*> contents;
