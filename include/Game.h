@@ -15,6 +15,9 @@ class Player
     public:
     shared_ptr<Room> currentRoom;
     Container *inventory;
+    string name;
+
+    bool inUse;
 };
 
 using namespace std;

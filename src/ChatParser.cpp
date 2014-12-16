@@ -100,6 +100,21 @@ string ToLower(string lowerMe)
     return lowerMe;
 }
 
+string RemoveSpaces(string changeMe)
+{
+    string returnMe = "";
+
+    for(unsigned int i = 0 ; i < changeMe.length() ; ++i)
+    {
+        if((changeMe[i] >= 65 && changeMe[i] <= 90) || (changeMe[i] >= 97 && changeMe[i] <= 122))
+        {
+            returnMe += changeMe[i];
+        }
+    }
+
+    return returnMe;
+}
+
 string Capitalize(string capMe)
 {
     if(capMe[0] >= 97 && capMe[0] <= 122)
@@ -868,15 +883,6 @@ string ChatParser::Eat(Player* p, Thing *eatMe)
                 }
             }
         }
-        for (auto pair : p->currentRoom->contents) {
-            Thing *pairThing = pair.second;
-            for (auto innerPair : pairThing->contents) {
-                Thing *innerThing = innerPair.second;
-                if (innerThing == eatMe) {
-                    return "You have to be holding the " + pairThing->GetName() + " first.\n";
-                }
-            }
-        }
     }
 }
 
@@ -962,17 +968,53 @@ void ChatParser::ClientThread(SOCKET cSock, char* ip)
 {
     int iResult = 0;
     char sendbuf[DEFAULT_BUFLEN] = {0};
+    char recvbuf[DEFAULT_BUFLEN] = {0};
+    Player* myPlayer;
+
+    string sendString = "What is your username? ";
+
+    for(;;)
+    {
+        strcpy(sendbuf, sendString.c_str());
+        send( cSock, sendbuf, sizeof(sendbuf), 0 );
+
+        iResult = recv(cSock, recvbuf, DEFAULT_BUFLEN, 0);
+        printf("Bytes received: %d\n", iResult);
+
+        if(RemoveSpaces(recvbuf) == "")
+        {
+            sendString = "You did not type anything.";
+            continue;
+        }
+
+        if((myPlayer = game->GetPlayer(ToLower(recvbuf))) == NULL)
+        {
+            myPlayer = game->CreatePlayer(ToLower(recvbuf));
+            sendString = "That username does not exist. Welcome " + string(recvbuf) + "!\n";
+            break;
+        }
+        else
+        {
+            if(myPlayer->inUse == true)
+            {
+                sendString = "That username is already being used.";
+                continue;
+            }
+            else
+            {
+                sendString = "Welcome " + string(recvbuf) + "!\n";
+            }
+        }
+    }
 
 
-    Player* myPlayer = game->GetPlayer(ip);
 
-    strcpy(sendbuf, ProcessCommand("look", myPlayer).c_str());
+    sendString += ProcessCommand("look", myPlayer);
+    strcpy(sendbuf, sendString.c_str());
     send( cSock, sendbuf, sizeof(sendbuf), 0 );
 
-
-
     do {
-        char recvbuf[DEFAULT_BUFLEN] = {0};
+        recvbuf[DEFAULT_BUFLEN] = {0};
         sendbuf[DEFAULT_BUFLEN] = {0};
 
         iResult = recv(cSock, recvbuf, DEFAULT_BUFLEN, 0);
