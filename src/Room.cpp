@@ -51,6 +51,9 @@ string Room::look()
     for (auto item : contents)
         if (item.second->isFree)
             output += safePrint("There is " + item.second->filename + " here.", &row);
+
+    for (auto play : players)
+        output += safePrint((play.second->name + " is here."), &row);
 //    for (int i = row; i < MAX_ROWS-1; i++)
 //        cout << endl;
     return output;

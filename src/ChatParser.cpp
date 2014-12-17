@@ -412,6 +412,7 @@ string Implode(vector<string> * arguments, string join)
 string ChatParser::Parse(string parseMe, Player* p)
 {
     vector<string> * arguments = StringToArguments(parseMe);
+    cout << parseMe << endl;
     string al = DetermineCommand(arguments);
     string thingInTheirWords = Implode(arguments, " ");
     vector<Thing*> possThings = DeterminePossibleThings(p, arguments);
@@ -611,6 +612,7 @@ bool ChatParser::Throw(Player* p, string throwMe, string hitMe)
 string ChatParser::Move(Player* p, string dir)
 {
     shared_ptr<Room> room(p->currentRoom);
+
     if (dir == "north" && room->north) {
         p->currentRoom = room->north;
     } else if (dir == "south" && room->south) {
@@ -625,6 +627,11 @@ string ChatParser::Move(Player* p, string dir)
         p->currentRoom = room->down;
     } else {
         return "You can't go that way.\n";
+    }
+
+    {
+        room->players.erase(p->name);
+        p->currentRoom->players[p->name] = p;
     }
 
     return p->currentRoom->look();
@@ -964,6 +971,8 @@ string ChatParser::ProcessCommand(string data, Player* p)
     return Parse(data, p);
 }
 
+
+
 void ChatParser::ClientThread(SOCKET cSock, char* ip)
 {
     int iResult = 0;
@@ -987,9 +996,9 @@ void ChatParser::ClientThread(SOCKET cSock, char* ip)
             continue;
         }
 
-        if((myPlayer = game->GetPlayer(ToLower(recvbuf))) == NULL)
+        if((myPlayer = game->GetPlayer((recvbuf))) == NULL)
         {
-            myPlayer = game->CreatePlayer(ToLower(recvbuf));
+            myPlayer = game->CreatePlayer((recvbuf));
             sendString = "That username does not exist. Welcome " + string(recvbuf) + "!\n";
             break;
         }
@@ -1007,15 +1016,18 @@ void ChatParser::ClientThread(SOCKET cSock, char* ip)
         }
     }
 
-
+    {
+        unique_lock<mutex> lk(cMutex);
+        myPlayer->currentRoom->players[myPlayer->name] = myPlayer;
+    }
 
     sendString += ProcessCommand("look", myPlayer);
     strcpy(sendbuf, sendString.c_str());
     send( cSock, sendbuf, sizeof(sendbuf), 0 );
 
     do {
-        recvbuf[DEFAULT_BUFLEN] = {0};
-        sendbuf[DEFAULT_BUFLEN] = {0};
+        char recvbuf[DEFAULT_BUFLEN] = {0};
+        char sendbuf[DEFAULT_BUFLEN] = {0};
 
         iResult = recv(cSock, recvbuf, DEFAULT_BUFLEN, 0);
 
@@ -1029,13 +1041,10 @@ void ChatParser::ClientThread(SOCKET cSock, char* ip)
         }
         else if (iResult == 0)
         {
-            printf("Connection closing...\n");
-            break;
-        }
-        else
-        {
-            printf("recv failed with error: %d\n", WSAGetLastError());
+            printf("Lost Client\n");
+            myPlayer->inUse = false;
             closesocket(cSock);
+            break;
         }
 
     } while (iResult > 0);

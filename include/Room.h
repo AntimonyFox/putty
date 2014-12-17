@@ -1,9 +1,13 @@
 #ifndef ROOM_H
 #define ROOM_H
 
+class Player;
+
 #include "Thing.h"
 #include "Timer.h"
 #include "Updatable.h"
+#include "Game.h"
+#include "Player.h"
 
 #include <iostream>
 #include <map>
@@ -34,6 +38,7 @@ class Room : public Updatable
 
         //Dynamic
         map<string, Thing*> contents;
+        map<string, Player*> players;
 
         //Functions
         string look();

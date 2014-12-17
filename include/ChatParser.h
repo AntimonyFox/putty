@@ -29,6 +29,8 @@
 
 using namespace std;
 
+string ToLower(string);
+
 class ChatParser
 {
     public:
@@ -80,7 +82,6 @@ class ChatParser
         static bool Swap(string swapMe, string withMe);//wip
         static bool Save(string state); //wip
         static bool Restore(string state); //wip
-        weak_ptr<int> currentRoom; //done
 
         static string lookAlias[3];
         static string inventoryAlias[3];
