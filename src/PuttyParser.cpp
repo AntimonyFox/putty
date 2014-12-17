@@ -196,6 +196,8 @@ void PuttyParser::ParseThing(string path, Game *game)
                         thing->name += (thing->name == "") ? word : " " + word;
                     else if (command == "hides")
                         thing->hidesName += (thing->hidesName == "") ? word : " " + word;
+                    else if (command == "enter")
+                        thing->enterName += (thing->enterName == "") ? word : " " + word;
                 }
             }
         }
@@ -240,6 +242,15 @@ void PuttyParser::InflateThings(Game *game)
             } else {
                 game->hasError = true;
                 cout << "ERROR: the item \"" << thing->hidesName << "\" doesn't exist." << endl;
+                cout << "Referenced in item \"" << thingPair.first << "\"" << endl;
+            }
+        }
+        if (thing->enterName != "") {
+            if (game->rooms.count(thing->enterName)) {
+                thing->enter = game->rooms[thing->enterName];
+            } else {
+//                game->hasError = true;
+                cout << "WARNING: the room \"" << thing->enterName << "\" doesn't exist." << endl;
                 cout << "Referenced in item \"" << thingPair.first << "\"" << endl;
             }
         }

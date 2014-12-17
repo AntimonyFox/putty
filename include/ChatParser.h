@@ -73,6 +73,7 @@ class ChatParser
         static string Close(Player* p, Thing *closeMe); //done
         static bool Tie(string tieMe, string toMe); //done
         static bool Break(string breakMe, string withMe); //done
+        static string In(Player *p, Thing *inMe);
 
         //Fox
         static string Jump(); //done
@@ -119,6 +120,7 @@ class ChatParser
         static string diagnoseAlias[2];
         static string saveAlias[1];
         static string restoreAlias[2];
+        static string inAlias[3];
 
         static map<string, string> aliasMap;
     private:

@@ -1,6 +1,7 @@
 keywords: bush
 
-isImportant
+isFree
+isAnchored
 
 description: "You see light on the other side of the underbrush."
 ::enter: cottage-lawn

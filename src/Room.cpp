@@ -26,7 +26,7 @@ string safePrint(string content, int *row)
         {
             string word;
             iss >> word;
-            col += word.length();
+            col += word.length() + 1;
             if (col > MAX_COLS)
             {
                 output += "\n";
@@ -34,7 +34,6 @@ string safePrint(string content, int *row)
                 col = 0;
             }
             output += word + " ";
-            col++;
         }
     }
     output += "\n";
@@ -50,7 +49,7 @@ string Room::look()
     output += safePrint(description, &row);
     for (auto item : contents)
         if (item.second->isFree)
-            output += safePrint("There is " + item.second->filename + " here.", &row);
+            output += safePrint("There is " + item.second->ArticleName() + " here.", &row);
 
     for (auto play : players)
         output += safePrint((play.second->name + " is here."), &row);

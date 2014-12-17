@@ -1,12 +1,15 @@
 #ifndef THING_H
 #define THING_H
 
+class Room;
+
 #include <map>
 #include <string>
 #include <vector>
 #include "Timer.h"
 #include "Updatable.h"
 #include <sstream>
+#include <memory>
 
 using namespace std;
 
@@ -30,7 +33,6 @@ class Thing : public Updatable
 
         //Dynamic
         map<string, Thing*> contents;
-        Thing *hides;
         bool isOn = false;
         bool isOpen = false;
         bool isMoved = false;
@@ -44,6 +46,8 @@ class Thing : public Updatable
         bool isContainer = false;
         bool isBreakable = false;
         bool isToggleable = false;
+        Thing *hides;
+        shared_ptr<Room> enter;
 
         //Functions
         string Look();
@@ -53,6 +57,7 @@ class Thing : public Updatable
     private:
         vector<string> contentNames;
         string hidesName;
+        string enterName;
 };
 
 #endif // THING_H

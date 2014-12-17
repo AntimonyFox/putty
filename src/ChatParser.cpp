@@ -38,6 +38,7 @@ string ChatParser::shoutAlias[3] = {"shout", "yell", "bark"};
 string ChatParser::diagnoseAlias[2] = {"diagnose", "health"};
 string ChatParser::saveAlias[1] = {"save"};
 string ChatParser::restoreAlias[2] = {"restore", "load"};
+string ChatParser::inAlias[3] = {"in", "into", "enter"};
 
 map<string, string> ChatParser::aliasMap = map<string, string>();
 mutex ChatParser::cMutex;
@@ -94,6 +95,7 @@ void ChatParser::Init(Game *game)
     ADDARRAY("diagnose", diagnoseAlias);
     ADDARRAY("save", saveAlias);
     ADDARRAY("restore", restoreAlias);
+    ADDARRAY("in", inAlias);
 
     do {
         cout << "Port: ";
@@ -545,6 +547,10 @@ string ChatParser::Parse(string parseMe, Player* p)
     {
         return Close(p, thing);
     }
+    else if(al == "in")
+    {
+        return In(p, thing);
+    }
 //    else if(al == "destroy")
 //    {
 //        if(arguments->size() > 0)
@@ -977,6 +983,16 @@ bool ChatParser::Restore(string state)
 {
 
     return true;
+}
+
+string ChatParser::In(Player *p, Thing *inMe)
+{
+    if (inMe->enter) {
+        p->currentRoom = inMe->enter;
+        return Look(p);
+    } else {
+        return "You can't go that way.\n";
+    }
 }
 
 string ChatParser::ProcessCommand(string data, Player* p)
