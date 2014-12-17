@@ -2,21 +2,13 @@
 #define GAME_H
 
 #include "Room.h"
+#include "Player.h"
 #include "Thing.h"
 #include "Container.h"
 
+#include <memory>
 #include <mutex>
 #include <map>
-
-class Player
-{
-    public:
-    shared_ptr<Room> currentRoom;
-    Container *inventory;
-    string name;
-
-    bool inUse;
-};
 
 using namespace std;
 

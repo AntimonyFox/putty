@@ -23,8 +23,9 @@ Player* Game::CreatePlayer(string ip)
     p->inventory = new Container();
     p->currentRoom = (startingRoom != "") ? rooms[startingRoom] : rooms.begin()->second;
     p->inUse = true;
+    p->name = ip;
 
-    ipMap[ip]=p;
+    ipMap[ToLower(ip)]=p;
 
     cout << "Player Created!" << endl;
 
@@ -38,7 +39,8 @@ Player* Game::GetPlayer(string ip)
     if (ipMap.find(ip) != ipMap.end())
     {
         ipMap[ip]->inUse = true;
-        return ipMap[ip];
+        ipMap[ip]->name = ip;
+        return ipMap[ToLower(ip)];
     }
     else
     {
