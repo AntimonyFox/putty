@@ -43,6 +43,17 @@ map<string, string> ChatParser::aliasMap = map<string, string>();
 mutex ChatParser::cMutex;
 vector<thread> ChatParser::threadList = vector<thread>();
 Game* ChatParser::game;
+string ChatParser::port = DEFAULT_PORT;
+
+bool isNumber(string check)
+{
+    for (int i = 0; i < check.size(); ++i)
+    {
+        if (check[i] < '0' && check[i] > '9')
+            return false;
+    }
+    return true;
+}
 
 void ChatParser::Init(Game *game)
 {
@@ -83,6 +94,11 @@ void ChatParser::Init(Game *game)
     ADDARRAY("diagnose", diagnoseAlias);
     ADDARRAY("save", saveAlias);
     ADDARRAY("restore", restoreAlias);
+
+    do {
+        cout << "Port: ";
+        getline(cin, port);
+    } while (!isNumber(port));
 
     StartServer();
 }
@@ -1004,15 +1020,19 @@ void ChatParser::ClientThread(SOCKET cSock, char* ip)
         }
         else
         {
+            unique_lock<mutex> lk(cMutex);
             if(myPlayer->inUse == true)
             {
+                myPlayer->inUse = true;
                 sendString = "That username is already being used.";
                 continue;
             }
             else
             {
                 sendString = "Welcome " + string(recvbuf) + "!\n";
+                break;
             }
+            lk.unlock();
         }
     }
 
@@ -1039,15 +1059,23 @@ void ChatParser::ClientThread(SOCKET cSock, char* ip)
 
             send( cSock, sendbuf, sizeof(sendbuf), 0 );
         }
-        else if (iResult == 0)
+        else
         {
             printf("Lost Client\n");
-            myPlayer->inUse = false;
+            unique_lock<mutex> lk(cMutex);
+            LogOff(myPlayer);
             closesocket(cSock);
+            lk.unlock();
             break;
         }
 
     } while (iResult > 0);
+}
+
+void ChatParser::LogOff(Player *p)
+{
+    p->inUse = false;
+    p->currentRoom->players.erase(p->name);
 }
 
 int ChatParser::StartServer()
@@ -1083,7 +1111,7 @@ int ChatParser::StartServer()
     hints.ai_flags = AI_PASSIVE;
 
     // Resolve the server address and port
-    iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
+    iResult = getaddrinfo(NULL, port.c_str(), &hints, &result);
     if ( iResult != 0 ) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
@@ -1111,6 +1139,8 @@ int ChatParser::StartServer()
     }
 
     freeaddrinfo(result);
+
+    cout << "Server started on port " << port << "!" << endl;
 
     iResult = listen(ListenSocket, SOMAXCONN);
     if (iResult == SOCKET_ERROR) {

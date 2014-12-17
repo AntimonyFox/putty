@@ -1,8 +1,8 @@
 #include "ThingsTimer.h"
 
-ThingsTimer::ThingsTimer(Thing *thing)
+ThingsTimer::ThingsTimer(Thing *thing) : Timer()
 {
-    this.thing = thing;
+    this->thing = thing;
 }
 
 ThingsTimer::~ThingsTimer()

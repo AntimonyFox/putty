@@ -1,0 +1,8 @@
+description: "You're looking for your car but you're all turned around. He's almost upon you now, and you can see...\n\nThere's blood on his face.\n\nMy God, there's blood everywhere!"
+
+contains: "shia labeouf"
+
+north: "fourth-woods"
+south: "fourth-woods"
+east: "fourth-woods"
+west: "fourth-woods"

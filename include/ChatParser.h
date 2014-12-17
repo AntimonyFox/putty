@@ -24,7 +24,7 @@
 #include <vector>
 
 #define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "27015"
+#define DEFAULT_PORT "126"
 
 
 using namespace std;
@@ -39,6 +39,7 @@ class ChatParser
         static string ProcessCommand(string data, Player* p);
         static void ClientThread(SOCKET cSock, char* ip);
         static int StartServer();
+        static void LogOff(Player *p);
 
         static void Init(Game *game);
         static string ChatError();
@@ -128,6 +129,8 @@ class ChatParser
         static vector<Thing*> DeterminePossibleThings(Player* p, vector<string> * arguments);
         static bool RoomHasThing(Player* p, Thing *thing);
         static bool InventoryHasThing(Player* p, Thing *thing);
+
+        static string port;
 };
 
 #endif // CHATPARSER_H

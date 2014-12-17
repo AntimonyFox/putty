@@ -4,20 +4,19 @@
 
 class GameTimer
 {
-    private:
-        Game* game;
-
     public:
         GameTimer(Game* game);
         virtual ~GameTimer();
+
+    protected:
+        Game* game;
 };
 
-class AttackTimer :: public GameTimer{
-    private:
-
+class AttackTimer : public GameTimer
+{
     public:
-        void timerFunction(){
-            game->canAttack = true;
+        void timerFunction() {
+//            game->canAttack = true;
         }
 };
 #endif // GAMETIMER_H

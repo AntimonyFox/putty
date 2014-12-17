@@ -2,7 +2,7 @@
 
 GameTimer::GameTimer(Game* game)
 {
-    this.game = game;
+    this->game = game;
 }
 
 GameTimer::~GameTimer()

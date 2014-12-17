@@ -1,0 +1,8 @@
+description: "You're walking in the woods. There's no one around and your phone is dead. Out of the corner of your eye, you spot him:\n\nShia LaBeouf."
+
+contains: phone, "shia labeouf"
+
+north: "second-woods"
+south: "second-woods"
+east: "second-woods"
+west: "second-woods"

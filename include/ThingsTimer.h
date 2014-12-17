@@ -2,16 +2,16 @@
 #define THINGSTIMER_H
 
 #include "Timer.h"
+#include "Thing.h"
 #include <iostream>
-#include <stdio>
 
 class ThingsTimer : public Timer
 {
-    private:
-        Thing* thing;
     public:
         ThingsTimer(Thing *thing);
         virtual ~ThingsTimer();
+    protected:
+        Thing* thing;
 };
 
 class BombTimer : public ThingsTimer
@@ -20,8 +20,8 @@ class BombTimer : public ThingsTimer
 
     public:
         void timerFunction(){
-            game->lostGame();
-            cout << "you lost the game" << endl;
+//            game->lostGame();
+//            cout << "you lost the game" << endl;
         }
 };
 
@@ -31,7 +31,7 @@ class DoorTimer : public ThingsTimer
 
     public:
         void timerFunction(){
-            isOpen = false;
+            thing->isOpen = false;
             cout << "Door has closed" << endl;
         }
 };

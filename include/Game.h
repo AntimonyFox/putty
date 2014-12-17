@@ -23,6 +23,7 @@ class Game : public Updatable
         Game(string path);
         virtual ~Game();
         void Start();
+        virtual void update();
 
     private:
         //Static
@@ -36,7 +37,6 @@ class Game : public Updatable
         Container *inventory;
         shared_ptr<Room> currentRoom;
         bool isLoaded;
-        bool canAttack = true;
         bool hasError;
         map<string, Player*> ipMap;
 
@@ -47,6 +47,7 @@ class Game : public Updatable
         void lostGame();
         Player* CreatePlayer(string ip);
         Player* GetPlayer(string ip);
+        bool DestroyPlayer(string ip);
 };
 
 #endif // GAME_H

@@ -1,0 +1,5 @@
+start: "starting-woods"
+pray: "Your prayers mean nothing."
+shout: "Shia LaBeouf!"
+diagnose: "You see him."
+no-go: "You're hopelessly lost."

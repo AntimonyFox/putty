@@ -16,6 +16,7 @@ class Thing : public Updatable
     public:
         Thing();
         virtual ~Thing();
+        virtual void update();
 
         //Static
         string appearance;

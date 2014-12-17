@@ -1,0 +1,3 @@
+description: "You've wrestled the knife from Shia LaBeouf."
+
+contains: shia-knife

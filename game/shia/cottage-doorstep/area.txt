@@ -1,0 +1,5 @@
+description: "Gnawing off your leg (quiet, quiet).\n\nLimping to the cottage (quiet, quiet).\n\nNow you're on the doorstep."
+
+contains: cottage-close
+
+no-go: "You're paralyzed with rage."

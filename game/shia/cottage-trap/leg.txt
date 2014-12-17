@@ -1,0 +1,3 @@
+description: "It's caught in a bear trap!"
+
+::eat: enter:"cottage-doorstep"

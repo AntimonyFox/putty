@@ -1,0 +1,3 @@
+description: "You creep silently through the underbrush.\n\nAha! In the distance! A small cottage with a light on - hope!"
+
+contains: cottage

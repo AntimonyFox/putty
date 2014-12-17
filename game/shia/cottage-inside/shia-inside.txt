@@ -1,0 +1,4 @@
+name: Shia LaBeouf
+description: "He hasn't heard you enter."
+
+::attack: cottage-strangle

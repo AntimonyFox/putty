@@ -1,0 +1,5 @@
+keywords: actual cannibal
+
+description: "He's following you about thirty feet back."
+timer-interval: 10
+timer-action: "He's gaining on you. (Shia LaBeouf)."

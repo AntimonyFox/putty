@@ -1,0 +1,8 @@
+description: "You're running for your life! (from Shia LaBeouf).\n\nHe's brandishing a knife (it's Shia LaBeouf)."
+
+contains: "shia labeouf"
+
+north: "fifth-woods"
+south: "fifth-woods"
+east: "fifth-woods"
+west: "fifth-woods"

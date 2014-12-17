@@ -1,0 +1,5 @@
+description: "You move stealthily towards the cottage.\n\nBut your leg! Ah! It's caught in a bear trap!"
+
+contains: "bear trap", leg
+
+no-go: "You're caught in a bear trap!"

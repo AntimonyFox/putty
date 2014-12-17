@@ -1,0 +1,3 @@
+description: "Now it's dark, and you seem to have lost him, but you're hopelessly lost yourself. Stranded with a murderer."
+
+contains: underbrush

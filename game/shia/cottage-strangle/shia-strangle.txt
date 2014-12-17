@@ -1,0 +1,6 @@
+name: Shia LaBeouf
+description: "There's death in his eyes."
+
+contains: knife
+
+::attack: cottage-strangle

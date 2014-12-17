@@ -1,5 +1,6 @@
 #ifndef TIMER_H
 #define TIMER_H
+
 #include <ctime>
 #include "Updatable.h"
 
@@ -10,17 +11,17 @@ class Timer : public Updatable
         bool running, reset;
 
     public:
-        Timer(bool running);
+        Timer();
         bool isStarted();
         void startTime();
         void stopTime();
 
         clock_t pause();
-        clock_t unPause();
+        void unPause();
 
         void resetTimer();
 
-        virtual void timerFunction() = 0;
+        virtual void timerFunction();
         virtual void update();
 
         void setDuration(clock_t setDuration);

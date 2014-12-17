@@ -1,13 +1,14 @@
 #include "Timer.h"
 using namespace std;
 
-bool Timer::Timer(){
-    Timer.running = false;
-    Timer.reset = false;
-    Timer.started = clock();
-    Timer.stopped = Time.started;
-    Timer.duration = Timer.stopped - Timer.started;
-    Timer.pauseDuration = Timer.duration;
+Timer::Timer()
+{
+    running = false;
+    reset = false;
+    started = clock();
+    stopped = started;
+    duration = stopped - started;
+    pauseDuration = duration;
 }
 
 bool Timer::isStarted(){
@@ -29,8 +30,14 @@ void Timer::stopTime(){
         stopped = clock();
 }
 
-clock_t Timer::update(){
-    if ((clock() - startTime) > duration){
+void Timer::timerFunction()
+{
+
+}
+
+
+void Timer::update(){
+    if ((clock() - started) > duration){
         timerFunction();
     }
 }
@@ -48,7 +55,7 @@ clock_t Timer::pause(){
         return pauseDuration;
 }
 
-clock_t Timer::unPause(){
+void Timer::unPause(){
     if(!running){
         startTime();
     }

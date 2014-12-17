@@ -1,0 +1,3 @@
+description: "You stab him in the kidney.\n\nSafe at last from Shia LaBeouf."
+
+::exit: dark-woods

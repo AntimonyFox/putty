@@ -1,0 +1,4 @@
+name: cottage
+description: "Sitting inside - Shia LaBeouf."
+
+::enter: cottage-inside

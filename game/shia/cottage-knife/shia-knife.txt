@@ -1,0 +1,4 @@
+name: Shia LaBeouf
+description: "There's death in his eyes."
+
+::attack: enter:cottage-kill

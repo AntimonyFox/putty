@@ -27,7 +27,7 @@ Player* Game::CreatePlayer(string ip)
 
     ipMap[ToLower(ip)]=p;
 
-    cout << "Player Created!" << endl;
+    cout << "Player Created with key: " << ToLower(ip) << endl;
 
     return p;
 }
@@ -36,15 +36,34 @@ Player* Game::GetPlayer(string ip)
 {
     unique_lock<mutex> lk(ipMutex);
 
-    if (ipMap.find(ip) != ipMap.end())
+    if (ipMap.find(ToLower(ip)) != ipMap.end())
     {
-        ipMap[ip]->inUse = true;
-        ipMap[ip]->name = ip;
-        return ipMap[ToLower(ip)];
+        Player *p = ipMap[ToLower(ip)];
+        p->name = ip;
+        p->currentRoom->players[ToLower(p->name)] = p;
+
+        return p;
     }
     else
     {
         return NULL;
+    }
+}
+
+bool Game::DestroyPlayer(string ip)
+{
+    unique_lock<mutex> lk(ipMutex);
+
+    if (ipMap.find(ip) != ipMap.end())
+    {
+        ipMap.erase(ip);
+        cout << "Destroyed player with ip " << ip << "." << endl;
+        return true;
+    }
+    else
+    {
+        cout << "Couldn't destroy player with ip " << ip << " - player not found." << endl;
+        return false;
     }
 }
 
@@ -107,13 +126,15 @@ Thing* Game::GetItemInRoom(string itemName)
     }
 }
 
-void update(){
+void Game::update()
+{
     for (auto timer: timers)
         timer.update();
     for (auto room: rooms)
-        room.second.update();
+        room.second->update();
 }
 
-void Game::lostGame(){
+void Game::lostGame()
+{
 
 }
