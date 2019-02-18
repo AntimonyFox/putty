@@ -429,6 +429,7 @@ string Implode(vector<string> * arguments, string join)
 
 string ChatParser::Parse(string parseMe, Player* p)
 {
+    parseMe = parseMe.erase(parseMe.find_last_not_of(" \n\r\t") + 1);
     vector<string> * arguments = StringToArguments(parseMe);
     cout << parseMe << endl;
     string al = DetermineCommand(arguments);
