@@ -51,8 +51,9 @@ void Timer::resetTimer(){
 clock_t Timer::pause(){
     if(running)
         stopTime();
-        pauseDuration = stopped - started;
-        return pauseDuration;
+    // Verify this logic
+    pauseDuration = stopped - started;
+    return pauseDuration;
 }
 
 void Timer::unPause(){
