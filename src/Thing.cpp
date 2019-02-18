@@ -29,11 +29,11 @@ string Thing::ArticleName()
 string Thing::Look()
 {
     string output = "";
-    output += " "; for (int i = 0; i < filename.length()+2; i++) output += "-"; output += "\n";
+    output += " "; for (unsigned int i = 0; i < filename.length()+2; i++) output += "-"; output += "\n";
     output += "| " + filename + " |" + "\n";
     if (name != "")
         output += name + "\n";
-    output += " "; for (int i = 0; i < filename.length()+2; i++) output += "-"; output += "\n";
+    output += " "; for (unsigned int i = 0; i < filename.length()+2; i++) output += "-"; output += "\n";
 
     if (!keywords.empty())
     {

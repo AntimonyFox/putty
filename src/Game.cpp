@@ -123,6 +123,8 @@ Thing* Game::GetItemInRoom(string itemName)
                 }
             }
         }
+        // TODO: Safe?
+        return nullptr;
     }
 }
 

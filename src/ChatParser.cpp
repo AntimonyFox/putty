@@ -48,7 +48,7 @@ string ChatParser::port = DEFAULT_PORT;
 
 bool isNumber(string check)
 {
-    for (int i = 0; i < check.size(); ++i)
+    for (unsigned int i = 0; i < check.size(); ++i)
     {
         if (check[i] < '0' && check[i] > '9')
             return false;
@@ -420,7 +420,7 @@ string Implode(vector<string> * arguments, string join)
     string output = "";
     if (!arguments->empty()) {
         output += (*arguments)[0];
-            for (int i = 1; i < arguments->size(); i++) {
+            for (unsigned int i = 1; i < arguments->size(); i++) {
             output += join + (*arguments)[i];
         }
     }
@@ -722,7 +722,7 @@ string ChatParser::Take(Player* p, Thing *takeMe)
                 for (auto innerPair : roomThing->contents)
                 {
                     Thing *innerThing = innerPair.second;
-                    if (innerPair.second == takeMe)
+                    if (innerThing == takeMe)
                     {
                         roomThing->contents.erase(takeMe->filename);
                         break;
@@ -842,6 +842,7 @@ string ChatParser::Drink(Player* p, Thing *drinkMe)
             }
         }
     }
+    return "";
 }
 
 string ChatParser::Turn(Player* p, Thing *turnMe, bool on)
@@ -856,6 +857,7 @@ string ChatParser::Turn(Player* p, Thing *turnMe, bool on)
             return "The " + turnMe->GetName() + " is now " + (on ? "on" : "off") + ".\n";
         }
     }
+    return "";
 }
 
 bool ChatParser::Turn(Player* p, string turnMe)
@@ -912,6 +914,7 @@ string ChatParser::Eat(Player* p, Thing *eatMe)
                 }
             }
         }
+        return "";
     }
 }
 
