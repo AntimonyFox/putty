@@ -1,15 +1,29 @@
 #ifndef CHATPARSER_H
 #define CHATPARSER_H
 
-#define _WIN32_WINNT 0x501
-
 #include "Room.h"
 #include "Thing.h"
 #include "Game.h"
 
-#include <windows.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
+#ifdef _WIN32
+    /* See http://stackoverflow.com/questions/12765743/getaddrinfo-on-win32 */
+    #ifndef _WIN32_WINNT
+        #define _WIN32_WINNT 0x0501  /* Windows XP. */
+    #endif
+    #include <winsock2.h>
+    #include <Ws2tcpip.h>
+    #include <windows.h>
+#else
+    /* Use POSIX-style sockets for non-Windows environments. */
+    #include <sys/socket.h>
+    #include <arpa/inet.h>
+    #include <netdb.h>  /* Needed for getaddrinfo() and freeaddrinfo() */
+    #include <unistd.h> /* Needed for close() */
+    
+    // What about this?
+    // #include <sys/types.h>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
@@ -39,6 +53,9 @@ class ChatParser
         static string ProcessCommand(string data, Player* p);
         static void ClientThread(SOCKET cSock, char* ip);
         static int StartServer();
+        static int SocketInit();
+        static int SocketClose(SOCKET sock);
+        static int SocketQuit();
         static void LogOff(Player *p);
 
         static void Init(Game *game);

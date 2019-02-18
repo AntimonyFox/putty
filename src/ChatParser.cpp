@@ -1098,10 +1098,9 @@ void ChatParser::LogOff(Player *p)
     p->currentRoom->players.erase(p->name);
 }
 
+// https://stackoverflow.com/questions/28027937/cross-platform-sockets
 int ChatParser::StartServer()
 {
-
-    WSADATA wsaData;
     int iResult;
 
     SOCKET ListenSocket = INVALID_SOCKET;
@@ -1114,11 +1113,8 @@ int ChatParser::StartServer()
     int AddrLen;
     char AddrName[NI_MAXHOST];
 
-    int curID = 0;
-
-
-    // Initialize Winsock
-    iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
+    // Initialize socket
+    iResult = SocketInit();
     if (iResult != 0) {
         printf("WSAStartup failed with error: %d\n", iResult);
         return 1;
@@ -1188,18 +1184,51 @@ int ChatParser::StartServer()
     }
 
     // shutdown the connection since we're done
-    iResult = shutdown(ClientSocket, SD_SEND);
+    iResult = SocketClose(ClientSocket);
     if (iResult == SOCKET_ERROR) {
         printf("shutdown failed with error: %d\n", WSAGetLastError());
-        closesocket(ClientSocket);
-        WSACleanup();
+        SocketQuit();
         return 1;
     }
 
-    // cleanup
-    closesocket(ClientSocket);
-    WSACleanup();
+    // Cleanup
+    SocketQuit();
 
     return 0;
 }
 
+int ChatParser::SocketInit()
+{
+    #ifdef _WIN32
+        // Initialize Winsock
+        WSADATA wsa_data;
+        return WSAStartup(MAKEWORD(2,2), &wsa_data);
+    #else
+        return 0;
+    #endif
+}
+
+int ChatParser::SocketClose(SOCKET sock)
+{
+    int iResult = 0;
+
+    #ifdef _WIN32
+        // int iResult = shutdown(sock, SD_BOTH);   // What is SD_BOTH, SD_SEND?
+        iResult = shutdown(sock, SD_SEND);
+        if (iResult == 0) { iResult = closesocket(sock); }
+    #else
+        iResult = shutdown(sock, SHUT_RDWR);
+        if (iResult == 0) { iResult = close(sock); }
+    #endif
+    
+    return iResult;
+}
+
+int ChatParser::SocketQuit()
+{
+    #ifdef _WIN32
+        return WSACleanup();
+    #else
+        return 0;
+    #endif
+}
