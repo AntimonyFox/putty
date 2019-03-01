@@ -19,7 +19,13 @@
     #include <arpa/inet.h>
     #include <netdb.h>  /* Needed for getaddrinfo() and freeaddrinfo() */
     #include <unistd.h> /* Needed for close() */
-    
+    #include <cstring>
+
+    #define SOCKET int
+    #define INVALID_SOCKET -1
+    #define SOCKET_ERROR SO_ERROR
+    #define LPSOCKADDR sockaddr
+
     // What about this?
     // #include <sys/types.h>
 #endif
@@ -54,6 +60,8 @@ class ChatParser
         static void ClientThread(SOCKET cSock, char* ip);
         static int StartServer();
         static int SocketInit();
+        static int SocketGetLastError();
+        static int SocketShutdown(SOCKET sock);
         static int SocketClose(SOCKET sock);
         static int SocketQuit();
         static void LogOff(Player *p);

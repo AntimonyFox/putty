@@ -1084,7 +1084,7 @@ void ChatParser::ClientThread(SOCKET cSock, char* ip)
             printf("Lost Client\n");
             unique_lock<mutex> lk(cMutex);
             LogOff(myPlayer);
-            closesocket(cSock);
+            SocketClose(cSock);
             lk.unlock();
             break;
         }
@@ -1130,7 +1130,7 @@ int ChatParser::StartServer()
     iResult = getaddrinfo(NULL, port.c_str(), &hints, &result);
     if ( iResult != 0 ) {
         printf("getaddrinfo failed with error: %d\n", iResult);
-        WSACleanup();
+        SocketQuit();
         return 1;
     }
 
@@ -1138,19 +1138,19 @@ int ChatParser::StartServer()
     ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
     if (ListenSocket == INVALID_SOCKET)
         {
-        printf("socket failed with error: %d\n", WSAGetLastError());
+        printf("socket failed with error: %d\n", SocketGetLastError());
         freeaddrinfo(result);
-        WSACleanup();
+        SocketQuit();
         return 1;
     }
 
     // Setup the TCP listening socket
     iResult = bind( ListenSocket, result->ai_addr, (int)result->ai_addrlen);
     if (iResult == SOCKET_ERROR) {
-        printf("bind failed with error: %d\n", WSAGetLastError());
+        printf("bind failed with error: %d\n", SocketGetLastError());
         freeaddrinfo(result);
-        closesocket(ListenSocket);
-        WSACleanup();
+        SocketClose(ListenSocket);
+        SocketQuit();
         return 1;
     }
 
@@ -1160,17 +1160,17 @@ int ChatParser::StartServer()
 
     iResult = listen(ListenSocket, SOMAXCONN);
     if (iResult == SOCKET_ERROR) {
-        printf("listen failed with error: %d\n", WSAGetLastError());
-        closesocket(ListenSocket);
-        WSACleanup();
+        printf("listen failed with error: %d\n", SocketGetLastError());
+        SocketClose(ListenSocket);
+        SocketQuit();
         return 1;
     }
 
     // Accept a client socket
+    // TODO: Do we ever get out of this?
     for(;;)
     {
         ClientSocket = accept(ListenSocket, NULL, NULL);
-
         if (ClientSocket != INVALID_SOCKET)
         {
             printf("Client Found! ");
@@ -1184,9 +1184,10 @@ int ChatParser::StartServer()
     }
 
     // shutdown the connection since we're done
-    iResult = SocketClose(ClientSocket);
+    iResult = SocketShutdown(ClientSocket);
+    if (iResult != SOCKET_ERROR) iResult = SocketClose(ClientSocket);
     if (iResult == SOCKET_ERROR) {
-        printf("shutdown failed with error: %d\n", WSAGetLastError());
+        printf("shutdown failed with error: %d\n", SocketGetLastError());
         SocketQuit();
         return 1;
     }
@@ -1200,7 +1201,6 @@ int ChatParser::StartServer()
 int ChatParser::SocketInit()
 {
     #ifdef _WIN32
-        // Initialize Winsock
         WSADATA wsa_data;
         return WSAStartup(MAKEWORD(2,2), &wsa_data);
     #else
@@ -1208,20 +1208,32 @@ int ChatParser::SocketInit()
     #endif
 }
 
-int ChatParser::SocketClose(SOCKET sock)
+int ChatParser::SocketGetLastError()
 {
-    int iResult = 0;
+    #ifdef _WIN32
+        return WSAGetLastError();
+    #else
+        return errno;
+    #endif
+}
 
+int ChatParser::SocketShutdown(SOCKET sock)
+{
     #ifdef _WIN32
         // int iResult = shutdown(sock, SD_BOTH);   // What is SD_BOTH, SD_SEND?
-        iResult = shutdown(sock, SD_SEND);
-        if (iResult == 0) { iResult = closesocket(sock); }
+        return shutdown(sock, SD_SEND);
     #else
-        iResult = shutdown(sock, SHUT_RDWR);
-        if (iResult == 0) { iResult = close(sock); }
+        return shutdown(sock, SHUT_RDWR);
     #endif
-    
-    return iResult;
+}
+
+int ChatParser::SocketClose(SOCKET sock)
+{
+    #ifdef _WIN32
+        return closesocket(sock);
+    #else
+        return close(sock);
+    #endif
 }
 
 int ChatParser::SocketQuit()
