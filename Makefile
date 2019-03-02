@@ -8,7 +8,11 @@ SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 # Alt for patsubst: $(var:pattern=replacement)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 # Linker flags (linker is ld)
-LDFLAGS := -lws2_32
+ifeq ($(OS),Windows_NT)
+	LDFLAGS := -lws2_32
+else
+	LDFLAGS := -lwebsockets -pthread
+endif
 # compiler flags: -g: debugging, -Wall: turn on compiler warnings
 CPPFLAGS := -g -Wall -std=c++11 -Iinclude
 # CXXFLAGS := ...
