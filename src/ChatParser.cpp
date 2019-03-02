@@ -1120,7 +1120,12 @@ int ChatParser::StartServer()
         return 1;
     }
 
-    ZeroMemory(&hints, sizeof(hints));
+    #ifdef _WIN32
+        ZeroMemory(&hints, sizeof(hints));
+    #else
+        bzero(&hints, sizeof(hints));
+    #endif
+
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
@@ -1176,8 +1181,8 @@ int ChatParser::StartServer()
             printf("Client Found! ");
             send( ClientSocket, "sdas", iResult, 0 );
 
-            getpeername(ClientSocket, (LPSOCKADDR)&Addr, &AddrLen);
-            getnameinfo((LPSOCKADDR)&Addr, AddrLen, AddrName, sizeof(AddrName), NULL, 0, NI_NUMERICHOST);
+            getpeername(ClientSocket, (LPSOCKADDR)&Addr, (socklen_t*)&AddrLen);
+            getnameinfo((LPSOCKADDR)&Addr, (socklen_t)AddrLen, AddrName, sizeof(AddrName), NULL, 0, NI_NUMERICHOST);
             cout << "IP: " << AddrName << endl;
             threadList.push_back(thread(ClientThread, ClientSocket, AddrName) );
         }

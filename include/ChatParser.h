@@ -25,7 +25,7 @@
     #define SOCKET int
     #define INVALID_SOCKET -1
     #define SOCKET_ERROR SO_ERROR
-    #define LPSOCKADDR sockaddr
+    #define LPSOCKADDR struct sockaddr *
 
     // What about this?
     // #include <sys/types.h>
