@@ -22,13 +22,11 @@
 
     #include <cstring>
 
+    /* Redefine Windows types for Linux */
     #define SOCKET int
     #define INVALID_SOCKET -1
     #define SOCKET_ERROR SO_ERROR
     #define LPSOCKADDR struct sockaddr *
-
-    // What about this?
-    // #include <sys/types.h>
 #endif
 
 #include <stdlib.h>
