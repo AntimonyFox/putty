@@ -43,7 +43,7 @@ class Room : public Updatable
         //Functions
         string look();
         void print();
-        virtual void update();
+        virtual void Update();
 
     private:
         vector<string> contentNames;

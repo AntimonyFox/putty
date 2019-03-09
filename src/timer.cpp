@@ -36,7 +36,7 @@ void Timer::timerFunction()
 }
 
 
-void Timer::update(){
+void Timer::Update(){
     if ((clock() - started) > duration){
         timerFunction();
     }

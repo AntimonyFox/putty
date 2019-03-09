@@ -23,7 +23,7 @@ class Game : public Updatable
         Game(string path);
         virtual ~Game();
         void Start();
-        virtual void update();
+        virtual void Update();
 
     private:
         //Static

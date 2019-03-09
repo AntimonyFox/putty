@@ -22,7 +22,7 @@ class Timer : public Updatable
         void resetTimer();
 
         virtual void timerFunction();
-        virtual void update();
+        virtual void Update();
 
         void setDuration(clock_t setDuration);
 };

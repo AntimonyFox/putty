@@ -76,9 +76,9 @@ void Room::print()
     cout << "----------------------------------------" << endl;
 }
 
-void Room::update(){
+void Room::Update(){
     for (auto timer: timers)
-        timer.update();
+        timer.Update();
     for (auto thing : contents)
-        thing.second->update();
+        thing.second->Update();
 }

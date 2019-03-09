@@ -19,7 +19,7 @@ class Thing : public Updatable
     public:
         Thing();
         virtual ~Thing();
-        virtual void update();
+        virtual void Update();
 
         //Static
         string appearance;

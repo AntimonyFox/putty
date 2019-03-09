@@ -78,11 +78,11 @@ string Thing::Look()
     return output;
 }
 
-void Thing::update(){
+void Thing::Update(){
     for (auto timer : timers)
-        timer.update();
+        timer.Update();
 
     if (isContainer)
         for (auto thing : contents)
-            thing.second->update();
+            thing.second->Update();
 }

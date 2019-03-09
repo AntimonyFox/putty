@@ -72,7 +72,7 @@ void Game::Start() {
 
         string uInput;
 
-        thread t1(update);
+        thread t1(Update);
 
         while(true) {
             cout << endl;
@@ -107,12 +107,12 @@ Thing* Game::GetItemInRoom(string itemName) {
     }
 }
 
-void Game::update() {
+void Game::Update() {
     for (auto timer: timers)
-        timer.update();
+        timer.Update();
 
     for (auto room: rooms)
-        room.second->update();
+        room.second->Update();
 }
 
 void Game::LostGame() {
