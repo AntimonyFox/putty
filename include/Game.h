@@ -1,18 +1,18 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Room.h"
-#include "Player.h"
-#include "Thing.h"
+#include <map>
+#include <memory>
+#include <mutex>
+
 #include "Container.h"
+#include "Player.h"
+#include "Room.h"
+#include "Thing.h"
 #include "Timer.h"
 #include "Updatable.h"
 
-#include <memory>
-#include <mutex>
-#include <map>
-
-using namespace std;
+using std::string;
 
 class Game : public Updatable
 {
@@ -34,20 +34,20 @@ class Game : public Updatable
         mutex ipMutex;
 
         //Dynamic
-        Container *inventory;
+        Container* inventory;
         shared_ptr<Room> currentRoom;
         bool isLoaded;
         bool hasError;
-        map<string, Player*> ipMap;
+        map<string, Player*> playerMap;
 
         //Functions
-        Thing *GetItem(string itemName);
-        Thing *GetItemInRoom(string itemName);
+        Thing* GetItem(string itemName);
+        Thing* GetItemInRoom(string itemName);
 
-        void lostGame();
-        Player* CreatePlayer(string ip);
-        Player* GetPlayer(string ip);
-        bool DestroyPlayer(string ip);
+        void LostGame();
+        Player* CreatePlayer(string username);
+        Player* GetPlayer(string username);
+        bool DestroyPlayer(string username);
 };
 
 #endif // GAME_H
