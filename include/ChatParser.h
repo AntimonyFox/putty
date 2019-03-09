@@ -48,8 +48,6 @@
 
 using namespace std;
 
-string ToLower(string);
-
 class ChatParser
 {
     public:

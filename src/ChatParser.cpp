@@ -1,5 +1,7 @@
 #include "ChatParser.h"
 
+#include "utilities.h"
+
 #define ADDARRAY(str, arr) for(unsigned int i = 0 ; i < ( sizeof(arr)/sizeof(arr[0]) ) ; ++i){aliasMap[arr[i]] = str;}
 
 string ChatParser::lookAlias[3] = {"look", "l", "description"};
@@ -46,16 +48,6 @@ vector<thread> ChatParser::threadList = vector<thread>();
 Game* ChatParser::game;
 string ChatParser::port = DEFAULT_PORT;
 
-bool isNumber(string check)
-{
-    for (unsigned int i = 0; i < check.size(); ++i)
-    {
-        if (check[i] < '0' && check[i] > '9')
-            return false;
-    }
-    return true;
-}
-
 void ChatParser::Init(Game *game)
 {
     ChatParser::game = game;
@@ -100,55 +92,9 @@ void ChatParser::Init(Game *game)
     do {
         cout << "Port: ";
         getline(cin, port);
-    } while (!isNumber(port));
+    } while (!IsNumber(port));
 
     StartServer();
-}
-
-string ToLower(string lowerMe)
-{
-    for(unsigned int i = 0 ; i < lowerMe.length() ; ++i)
-    {
-        if(lowerMe[i] >= 65 && lowerMe[i] <= 90)
-        {
-            lowerMe[i] += 32;
-        }
-    }
-
-    return lowerMe;
-}
-
-string RemoveSpaces(string changeMe)
-{
-    string returnMe = "";
-
-    for(unsigned int i = 0 ; i < changeMe.length() ; ++i)
-    {
-        if((changeMe[i] >= 65 && changeMe[i] <= 90) || (changeMe[i] >= 97 && changeMe[i] <= 122))
-        {
-            returnMe += changeMe[i];
-        }
-    }
-
-    return returnMe;
-}
-
-string Capitalize(string capMe)
-{
-    if(capMe[0] >= 97 && capMe[0] <= 122)
-    {
-        capMe[0] -= 32;
-    }
-
-    for(unsigned int i = 1 ; i < capMe.length() ; ++i)
-    {
-        if(capMe[i] >= 65 && capMe[i] <= 90)
-        {
-            capMe[i] += 32;
-        }
-    }
-
-    return capMe;
 }
 
 string ChatParser::ChatError()
@@ -161,51 +107,6 @@ string ChatParser::NoText()
     return "You haven't typed anything.\n";
 }
 
-void removeThe(vector<string> * purgeMe)
-{
-    vector<string>::iterator itr;
-    vector<string> * newString = new vector<string>();
-
-	for ( itr = purgeMe->begin(); itr < purgeMe->end(); ++itr )
-	{
-		if(ToLower(*itr) != "the")
-        {
-            newString->push_back(*itr);
-        }
-	}
-
-    *purgeMe = *newString;
-}
-
-void removeFirst(vector<string> * purgeMe)
-{
-    purgeMe->erase(purgeMe->begin());
-}
-
-vector<string> * StringToArguments(string parseMe)
-{
-    vector<string> * arguments = new vector<string>();
-    string curWord = "";
-    for(unsigned int i = 0 ; i < parseMe.length() ; ++i)
-    {
-        char curChar = parseMe[i];
-        if(curChar != ' ')
-            curWord += curChar;
-        else if(curWord != "")
-        {
-            arguments->push_back(curWord);
-            curWord = "";
-        }
-
-        if((i == parseMe.length()-1) && (curWord != ""))
-        {
-            arguments->push_back(curWord);
-            curWord = "";
-        }
-    }
-    return arguments;
-}
-
 string ChatParser::DetermineCommand(vector<string> * arguments)
 {
     if(arguments->size() > 0)
@@ -215,12 +116,12 @@ string ChatParser::DetermineCommand(vector<string> * arguments)
         {
             return "";
         }
-        removeThe(arguments);
-        removeFirst(arguments);
+        RemoveThe(arguments);
+        RemoveFirst(arguments);
         if(al == "look")
         {
             if(arguments->size() > 1 && (*arguments)[0] == "at") {
-                removeFirst(arguments);
+                RemoveFirst(arguments);
                 return "examine";
             }
         }
@@ -250,7 +151,7 @@ string ChatParser::DetermineCommand(vector<string> * arguments)
         {
             string bl = (*arguments)[0];
             if (bl == "on" || bl == "off") {
-                removeFirst(arguments);
+                RemoveFirst(arguments);
                 return "turn " + bl;
             }
         }
@@ -413,18 +314,6 @@ bool ChatParser::InventoryHasThing(Player* p, Thing *thing)
         }
     }
     return false;
-}
-
-string Implode(vector<string> * arguments, string join)
-{
-    string output = "";
-    if (!arguments->empty()) {
-        output += (*arguments)[0];
-            for (unsigned int i = 1; i < arguments->size(); i++) {
-            output += join + (*arguments)[i];
-        }
-    }
-    return output;
 }
 
 string ChatParser::Parse(string parseMe, Player* p)

@@ -2,6 +2,7 @@
 
 #include "PuttyParser.h"
 #include "ChatParser.h"
+#include "utilities.h"
 
 #include <thread>
 
