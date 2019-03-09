@@ -1,4 +1,4 @@
-#include "ThingsTimer.h"
+#include "thingstimer.h"
 
 ThingsTimer::ThingsTimer(Thing *thing) : Timer()
 {

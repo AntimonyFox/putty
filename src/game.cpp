@@ -1,9 +1,9 @@
-#include "Game.h"
+#include "game.h"
 
 #include <thread>
 
-#include "ChatParser.h"
-#include "PuttyParser.h"
+#include "chatparser.h"
+#include "puttyparser.h"
 #include "utilities.h"
 
 Game::Game(string path) {

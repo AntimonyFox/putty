@@ -1,6 +1,6 @@
 #ifndef GAMETIMER_H
 #define GAMETIMER_H
-#include "Game.h"
+#include "game.h"
 
 class GameTimer
 {

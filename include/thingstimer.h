@@ -1,8 +1,8 @@
 #ifndef THINGSTIMER_H
 #define THINGSTIMER_H
 
-#include "Timer.h"
-#include "Thing.h"
+#include "timer.h"
+#include "thing.h"
 #include <iostream>
 
 class ThingsTimer : public Timer

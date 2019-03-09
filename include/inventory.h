@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <map>
-#include "Thing.h"
+#include "thing.h"
 
 using namespace::std;
 

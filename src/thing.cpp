@@ -1,4 +1,4 @@
-#include "Thing.h"
+#include "thing.h"
 #include <iostream>
 
 Thing::Thing()

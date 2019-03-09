@@ -1,9 +1,9 @@
 #ifndef CHATPARSER_H
 #define CHATPARSER_H
 
-#include "Room.h"
-#include "Thing.h"
-#include "Game.h"
+#include "room.h"
+#include "thing.h"
+#include "game.h"
 
 #ifdef _WIN32
     /* See http://stackoverflow.com/questions/12765743/getaddrinfo-on-win32 */

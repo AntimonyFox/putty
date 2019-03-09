@@ -1,7 +1,7 @@
 #ifndef CONTAINER_H
 #define CONTAINER_H
 
-#include "Thing.h"
+#include "thing.h"
 
 #include <iostream>
 #include <string>

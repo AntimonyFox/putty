@@ -3,11 +3,11 @@
 
 class Player;
 
-#include "Thing.h"
-#include "Timer.h"
-#include "Updatable.h"
-#include "Game.h"
-#include "Player.h"
+#include "thing.h"
+#include "timer.h"
+#include "updatable.h"
+#include "game.h"
+#include "player.h"
 
 #include <iostream>
 #include <map>

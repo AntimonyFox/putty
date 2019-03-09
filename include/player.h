@@ -3,8 +3,8 @@
 
 class Room;
 
-#include "Room.h"
-#include "Container.h"
+#include "room.h"
+#include "container.h"
 #include <memory>
 
 class Player

@@ -2,7 +2,7 @@
 #define TIMER_H
 
 #include <ctime>
-#include "Updatable.h"
+#include "updatable.h"
 
 class Timer : public Updatable
 {

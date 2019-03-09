@@ -1,7 +1,7 @@
 #ifndef PUTTYPARSER_H
 #define PUTTYPARSER_H
 
-#include "Game.h"
+#include "game.h"
 
 #include <cstdlib>
 #include <dirent.h>

@@ -1,4 +1,4 @@
-#include "Room.h"
+#include "room.h"
 
 #define MAX_COLS 80
 #define MAX_ROWS 25

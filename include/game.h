@@ -5,12 +5,12 @@
 #include <memory>
 #include <mutex>
 
-#include "Container.h"
-#include "Player.h"
-#include "Room.h"
-#include "Thing.h"
-#include "Timer.h"
-#include "Updatable.h"
+#include "container.h"
+#include "player.h"
+#include "room.h"
+#include "thing.h"
+#include "timer.h"
+#include "updatable.h"
 
 using std::string;
 

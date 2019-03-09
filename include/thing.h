@@ -6,8 +6,8 @@ class Room;
 #include <map>
 #include <string>
 #include <vector>
-#include "Timer.h"
-#include "Updatable.h"
+#include "timer.h"
+#include "updatable.h"
 #include <sstream>
 #include <memory>
 

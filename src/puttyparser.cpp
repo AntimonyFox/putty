@@ -1,4 +1,4 @@
-#include "PuttyParser.h"
+#include "puttyparser.h"
 
 #define IS_DIRECTORY(root) root != NULL
 #define IS_ROOM(path) path.rfind("/area.txt") != string::npos
