@@ -2,7 +2,7 @@
 
 #include "utilities.h"
 
-#define ADDARRAY(str, arr) for(unsigned int i = 0 ; i < ( sizeof(arr)/sizeof(arr[0]) ) ; ++i){aliasMap[arr[i]] = str;}
+#define ADDARRAY(str, arr) for (unsigned int i = 0 ; i < ( sizeof(arr)/sizeof(arr[0]) ) ; ++i){aliasMap[arr[i]] = str;}
 
 string ChatParser::lookAlias[3] = {"look", "l", "description"};
 string ChatParser::inventoryAlias[3] = {"inventory", "i", "inv"};
@@ -48,7 +48,7 @@ vector<thread> ChatParser::threadList = vector<thread>();
 Game* ChatParser::game;
 string ChatParser::port = DEFAULT_PORT;
 
-void ChatParser::Init(Game *game)
+void ChatParser::Init(Game* game)
 {
     ChatParser::game = game;
 
@@ -97,36 +97,28 @@ void ChatParser::Init(Game *game)
     StartServer();
 }
 
-string ChatParser::ChatError()
-{
+string ChatParser::ChatError() {
     return "I don't understand what you are saying.\n";
 }
 
-string ChatParser::NoText()
-{
+string ChatParser::NoText() {
     return "You haven't typed anything.\n";
 }
 
-string ChatParser::DetermineCommand(vector<string> * arguments)
-{
-    if(arguments->size() > 0)
-    {
+string ChatParser::DetermineCommand(vector<string>* arguments) {
+    if (arguments->size() > 0) {
         string al = aliasMap[ToLower((*arguments)[0])];
-        if (al == "")
-        {
+        if (al == "") {
             return "";
         }
         RemoveThe(arguments);
         RemoveFirst(arguments);
-        if(al == "look")
-        {
-            if(arguments->size() > 1 && (*arguments)[0] == "at") {
+        if (al == "look") {
+            if (arguments->size() > 1 && (*arguments)[0] == "at") {
                 RemoveFirst(arguments);
                 return "examine";
             }
-        }
-        else if (al == "move")
-        {
+        } else if (al == "move") {
             string bl = (*arguments)[0];
             if (arguments->size() > 0 && (
                                          bl == "north" ||
@@ -141,14 +133,10 @@ string ChatParser::DetermineCommand(vector<string> * arguments)
                                          bl == "down"))
             {
                 return "move";
-            }
-            else
-            {
+            } else {
                 return "moveObj";
             }
-        }
-        else if (al == "turn")
-        {
+        } else if (al == "turn") {
             string bl = (*arguments)[0];
             if (bl == "on" || bl == "off") {
                 RemoveFirst(arguments);
@@ -156,20 +144,20 @@ string ChatParser::DetermineCommand(vector<string> * arguments)
             }
         }
         return al;
-//        else if(al == "use")
+//        else if (al == "use")
 //        {
-//            if(arguments->size() > 0)
+//            if (arguments->size() > 0)
 //            {
 //                Use((*arguments)[0]);
 //            }
-//            else if(arguments->size() > 3 && (*arguments)[1]=="on")
+//            else if (arguments->size() > 3 && (*arguments)[1]=="on")
 //            {
 //                Use((*arguments)[0], (*arguments)[2]);
 //            }
 //        }
-//        else if(al == "throw")
+//        else if (al == "throw")
 //        {
-//            if(arguments->size() > 2 && ToLower((*arguments)[1]) == "at")
+//            if (arguments->size() > 2 && ToLower((*arguments)[1]) == "at")
 //            {
 //                Throw((*arguments)[0], (*arguments)[2]);
 //            }
@@ -178,9 +166,9 @@ string ChatParser::DetermineCommand(vector<string> * arguments)
 //                ChatError();
 //            }
 //        }
-//        else if(al == "put")
+//        else if (al == "put")
 //        {
-//            if(arguments->size() > 2 && ToLower((*arguments)[1]) == "in")
+//            if (arguments->size() > 2 && ToLower((*arguments)[1]) == "in")
 //            {
 //                Put((*arguments)[0], (*arguments)[2]);
 //            }
@@ -189,9 +177,9 @@ string ChatParser::DetermineCommand(vector<string> * arguments)
 //                ChatError();
 //            }
 //        }
-//        else if(al == "attack")
+//        else if (al == "attack")
 //        {
-//            if(arguments->size() > 2 && ToLower((*arguments)[1]) == "with")
+//            if (arguments->size() > 2 && ToLower((*arguments)[1]) == "with")
 //            {
 //                Attack((*arguments)[0], (*arguments)[2]);
 //            }
@@ -200,9 +188,9 @@ string ChatParser::DetermineCommand(vector<string> * arguments)
 //                ChatError();
 //            }
 //        }
-//        else if(al == "tie")
+//        else if (al == "tie")
 //        {
-//            if(arguments->size() > 2 && ToLower((*arguments)[1]) == "with")
+//            if (arguments->size() > 2 && ToLower((*arguments)[1]) == "with")
 //            {
 //                Tie((*arguments)[0], (*arguments)[2]);
 //            }
@@ -211,9 +199,9 @@ string ChatParser::DetermineCommand(vector<string> * arguments)
 //                ChatError();
 //            }
 //        }
-//        else if(al == "break")
+//        else if (al == "break")
 //        {
-//            if(arguments->size() > 2 && ToLower((*arguments)[1]) == "with")
+//            if (arguments->size() > 2 && ToLower((*arguments)[1]) == "with")
 //            {
 //                Break((*arguments)[0], (*arguments)[2]);
 //            }
@@ -222,9 +210,9 @@ string ChatParser::DetermineCommand(vector<string> * arguments)
 //                ChatError();
 //            }
 //        }
-//        else if(al == "swap")
+//        else if (al == "swap")
 //        {
-//            if(arguments->size() > 2 && ToLower((*arguments)[1]) == "with")
+//            if (arguments->size() > 2 && ToLower((*arguments)[1]) == "with")
 //            {
 //                Swap((*arguments)[0], (*arguments)[2]);
 //            }
@@ -233,15 +221,12 @@ string ChatParser::DetermineCommand(vector<string> * arguments)
 //                ChatError();
 //            }
 //        }
-    }
-    else
-    {
+    } else {
         return "";
     }
 }
 
-bool IsPossibleThing(Thing *thing, vector<string> * arguments)
-{
+bool IsPossibleThing(Thing* thing, vector<string>* arguments) {
     bool isPossibleThing = true;
     vector<string> keywords = thing->keywords;
     if (!keywords.empty()) {
@@ -264,12 +249,11 @@ bool IsPossibleThing(Thing *thing, vector<string> * arguments)
     return isPossibleThing;
 }
 
-vector<Thing*> ChatParser::DeterminePossibleThings(Player* p, vector<string> * arguments)
-{
+vector<Thing*> ChatParser::DeterminePossibleThings(Player* p, vector<string>* arguments) {
     vector<Thing*> possThings;
     if (!arguments->empty()) {
         for (auto roomPair : game->things) {
-            Thing *roomThing = roomPair.second;
+            Thing* roomThing = roomPair.second;
             if (IsPossibleThing(roomThing, arguments)) {
                 possThings.push_back(roomThing);
             }
@@ -278,17 +262,16 @@ vector<Thing*> ChatParser::DeterminePossibleThings(Player* p, vector<string> * a
     return possThings;
 }
 
-bool ChatParser::RoomHasThing(Player* p, Thing *thing)
-{
+bool ChatParser::RoomHasThing(Player* p, Thing* thing) {
     shared_ptr<Room> room = p->currentRoom;
 
     for (auto roomPair : room->contents) {
-        Thing *roomThing = roomPair.second;
+        Thing* roomThing = roomPair.second;
         if (thing == roomThing) {
             return true;
         } else if (roomThing->isContainer && roomThing->isOpen && !roomThing->contents.empty()) {
             for (auto innerPair : roomThing->contents) {
-                Thing *innerThing = innerPair.second;
+                Thing* innerThing = innerPair.second;
                 if (thing == innerThing) {
                     return true;
                 }
@@ -298,15 +281,14 @@ bool ChatParser::RoomHasThing(Player* p, Thing *thing)
     return false;
 }
 
-bool ChatParser::InventoryHasThing(Player* p, Thing *thing)
-{
+bool ChatParser::InventoryHasThing(Player* p, Thing* thing) {
     if (p->inventory->GetItem(thing->filename)) {
         return true;
     } else {
         for (auto pair : *p->inventory->container) {
-            Thing *invThing = pair.second.item;
+            Thing* invThing = pair.second.item;
             for (auto innerPair : invThing->contents) {
-                Thing *innerThing = innerPair.second;
+                Thing* innerThing = innerPair.second;
                 if (innerThing == thing) {
                     return true;
                 }
@@ -316,33 +298,24 @@ bool ChatParser::InventoryHasThing(Player* p, Thing *thing)
     return false;
 }
 
-string ChatParser::Parse(string parseMe, Player* p)
-{
+string ChatParser::Parse(string parseMe, Player* p) {
     parseMe = parseMe.erase(parseMe.find_last_not_of(" \n\r\t") + 1);
-    vector<string> * arguments = StringToArguments(parseMe);
+    vector<string>* arguments = StringToArguments(parseMe);
     cout << parseMe << endl;
     string al = DetermineCommand(arguments);
     string thingInTheirWords = Implode(arguments, " ");
     vector<Thing*> possThings = DeterminePossibleThings(p, arguments);
-    Thing *thing = !possThings.empty() ? possThings.front() : nullptr;
+    Thing* thing = !possThings.empty() ? possThings.front() : nullptr;
 
-    if(parseMe == "")
-    {
+    if (parseMe == "") {
         return NoText();
-    }
-    else if(al == "")
-    {
+    } else if (al == "") {
         return ChatError();
-    }
-    else if(al == "look")
-    {
+    } else if (al == "look") {
         return Look(p);
-    }
-    else if(al == "inventory")
-    {
+    } else if (al == "inventory") {
         return Inventory(p);
-    }
-    else if(
+    } else if (
             al == "north" ||
             al == "south" ||
             al == "west" ||
@@ -355,151 +328,87 @@ string ChatParser::Parse(string parseMe, Player* p)
             al == "down")
     {
         return Move(p, al);
-    }
-    else if(al == "move")
-    {
+    } else if (al == "move") {
         return Move(p, (*arguments)[0]);
-    }
-    else if(al == "pray")
-    {
+    } else if (al == "pray") {
         return Pray();
-    }
-    else if(al == "jump")
-    {
+    } else if (al == "jump") {
         return Jump();
-    }
-    else if(al == "diagnose")
-    {
+    } else if (al == "diagnose") {
         return Diagnose();
-    }
-    else if(al == "shout")
-    {
+    } else if (al == "shout") {
         return Shout();
-    }
-    else if(arguments->empty())
-    {
+    } else if (arguments->empty()) {
         return "What do you want to " + al + "?\n";
-    }
-    else if (possThings.empty())
-    {
+    } else if (possThings.empty()) {
         return "I'm not sure exactly what you're talking about.\n";
-    }
-    else if (possThings.size() > 1)
-    {
+    } else if (possThings.size() > 1) {
         return "You're going to need to be a little more specific.\n";
-    }
-    //Must be holding item
-    else if(al == "drop")
-    {
+    } else if (al == "drop") {      //Must be holding item
         return Drop(p, thing);
-    }
-    else if (!RoomHasThing(p, thing) && !InventoryHasThing(p, thing))
-    {
+    } else if (!RoomHasThing(p, thing) && !InventoryHasThing(p, thing)) {
         return "You can't see any " + thingInTheirWords + " here!\n";
-    }
-    else if(al == "take")
-    {
+    } else if (al == "take") {
         return Take(p, thing);
-    }
-    else if(al == "examine")
-    {
+    } else if (al == "examine") {
         return Examine(p, thing);
-    }
-    else if(al == "open")
-    {
+    } else if (al == "open") {
         return Open(p, thing);
-    }
-    else if(al == "drink")
-    {
+    } else if (al == "drink") {
         return Drink(p, thing);
-    }
-    else if(al == "read")
-    {
+    } else if (al == "read") {
         return Read(p, thing);
-    }
-    else if(al == "turn on")
-    {
+    } else if (al == "turn on") {
         return Turn(p, thing, true);
-    }
-    else if(al == "turn off")
-    {
+    } else if (al == "turn off") {
         return Turn(p, thing, false);
-    }
-    else if(al == "moveobj")
-    {
+    } else if (al == "moveobj") {
         return MoveObj(p, thing);
-    }
-    else if(al == "eat")
-    {
+    } else if (al == "eat") {
         return Eat(p, thing);
-    }
-    else if(al == "close")
-    {
+    } else if (al == "close") {
         return Close(p, thing);
-    }
-    else if(al == "in")
-    {
+    } else if (al == "in") {
         return In(p, thing);
     }
-//    else if(al == "destroy")
-//    {
-//        if(arguments->size() > 0)
-//        {
-//            Destroy((*arguments)[0]);
-//        }
-//    }
-//    else if(al == "save")
-//    {
-//        if(arguments->size() > 0)
-//        {
-//            Save((*arguments)[0]);
-//        }
-//    }
-//    else if(al == "restore")
-//    {
-//        if(arguments->size() > 0)
-//        {
-//            Restore((*arguments)[0]);
-//        }
-//    }
-    else
-    {
+    // else if (al == "destroy") {
+    //     if (arguments->size() > 0) {
+    //         Destroy((*arguments)[0]);
+    //     }
+    // } else if (al == "save") {
+    //     if (arguments->size() > 0) {
+    //         Save((*arguments)[0]);
+    //     }
+    // } else if (al == "restore") {
+    //     if (arguments->size() > 0) {
+    //         Restore((*arguments)[0]);
+    //     }
+    // } 
+    else {
         //Gets here if there's an alias but no implementation
         return "Unknown command: " + al + ".\n";
     }
-    return "";
 }
 
-string ChatParser::Look(Player* p)
-{
+string ChatParser::Look(Player* p) {
     return p->currentRoom->look();
 }
 
-string ChatParser::Inventory(Player* p)
-{
-    if (!p->inventory->IsEmpty())
+string ChatParser::Inventory(Player* p) {
+    if (!p->inventory->IsEmpty()) {
         return p->inventory->printContainer();
-    else
+    } else {
         return "You are empty-handed.\n";
+    }
 }
 
-void ChatParser::TakeAll(Player* p)
-{
+void ChatParser::TakeAll(Player* p) {}
 
-}
+void ChatParser::DropAll(Player* p) {}
 
-void ChatParser::DropAll(Player* p)
-{
+void ChatParser::ExamineAll(Player* p) {}
 
-}
-
-void ChatParser::ExamineAll(Player* p)
-{
-
-}
-
-bool ChatParser::Throw(Player* p, string throwMe, string hitMe)
-{
+bool ChatParser::Throw(Player* p, string throwMe, string hitMe) {
     //copy item as temp (for room)
     //Thing temp = throwMe;
     Thing* temp = p->inventory->GetItem(throwMe);
@@ -507,22 +416,17 @@ bool ChatParser::Throw(Player* p, string throwMe, string hitMe)
     p->inventory->remove(throwMe, 1);
 
     //check if breakable
-    if(temp->isBreakable == true){
-    //if true - do nothing!
+    if (temp->isBreakable == true) {        //if true - do nothing!
         cout << "it's broke, don't throw! Bahahahahahahaha" << endl;
         return false;
-    }
-    //if false - add copy to room
-    else{
+    } else {                                //if false - add copy to room
         cout << "You throw the " << throwMe << " at the " << hitMe << "." << endl;
         p->currentRoom->contents[throwMe] = temp;
         return true;
     }
-    return true;
 }
 
-string ChatParser::Move(Player* p, string dir)
-{
+string ChatParser::Move(Player* p, string dir) {
     shared_ptr<Room> room(p->currentRoom);
 
     if (dir == "north" && room->north) {
@@ -549,30 +453,23 @@ string ChatParser::Move(Player* p, string dir)
     return p->currentRoom->look();
 }
 
-bool ChatParser::Use(Player* p, string useMe)
-{
+bool ChatParser::Use(Player* p, string useMe) {
     Thing* temp = p->inventory->GetItem(useMe);
 
-    if (temp != nullptr)
-    {
+    if (temp != nullptr) {
         p->inventory->useItem(useMe);
         cout << "You used: " << useMe << "!" << endl;
-    }
-    else
-    {
+    } else {
         cout << "You don't have the " << useMe << "." << endl;
     }
     return true;
 }
 
-bool ChatParser::Use(Player* p, string useMe, string onMe)
-{
-
+bool ChatParser::Use(Player* p, string useMe, string onMe) {
     return true;
 }
 
-string ChatParser::Drop(Player* p, Thing *dropMe)
-{
+string ChatParser::Drop(Player* p, Thing* dropMe) {
     if (p->inventory->GetItem(dropMe->filename)) {
         p->inventory->remove(dropMe->filename, 1);
         p->currentRoom->contents[dropMe->filename] = dropMe;
@@ -582,38 +479,24 @@ string ChatParser::Drop(Player* p, Thing *dropMe)
     }
 }
 
-string ChatParser::Take(Player* p, Thing *takeMe)
-{
-    if (InventoryHasThing(p, takeMe))
-    {
+string ChatParser::Take(Player* p, Thing* takeMe) {
+    if (InventoryHasThing(p, takeMe)) {
         return "You already have that!\n";
-    }
-    else if (takeMe->isAnchored)
-    {
+    } else if (takeMe->isAnchored) {
         return "It is securely anchored.\n";
-    }
-    else if (!takeMe->isFree)
-    {
+    } else if (!takeMe->isFree) {
         return "An interesting idea...\n";
-    }
-    else
-    {
+    } else {
         shared_ptr<Room> room = p->currentRoom;
-        for (auto roomPair : room->contents)
-        {
-            Thing *roomThing = roomPair.second;
-            if (roomPair.second == takeMe)
-            {
+        for (auto roomPair : room->contents) {
+            Thing* roomThing = roomPair.second;
+            if (roomPair.second == takeMe) {
                 room->contents.erase(takeMe->filename);
                 break;
-            }
-            else if (roomThing->isContainer && roomThing->isOpen && !roomThing->contents.empty())
-            {
-                for (auto innerPair : roomThing->contents)
-                {
-                    Thing *innerThing = innerPair.second;
-                    if (innerThing == takeMe)
-                    {
+            } else if (roomThing->isContainer && roomThing->isOpen && !roomThing->contents.empty()) {
+                for (auto innerPair : roomThing->contents) {
+                    Thing* innerThing = innerPair.second;
+                    if (innerThing == takeMe) {
                         roomThing->contents.erase(takeMe->filename);
                         break;
                     }
@@ -625,24 +508,18 @@ string ChatParser::Take(Player* p, Thing *takeMe)
     }
 }
 
-string ChatParser::Open(Player* p, Thing *openMe)
-{
+string ChatParser::Open(Player* p, Thing* openMe) {
     shared_ptr<Room> room = p->currentRoom;
 
-    if (openMe->isContainer)
-    {
-        if (!openMe->isOpen)
-        {
+    if (openMe->isContainer) {
+        if (!openMe->isOpen) {
             openMe->isOpen = true;
-            if (!openMe->contents.empty())
-            {
+            if (!openMe->contents.empty()) {
                 string output = "";
                 output += "Opening the " + openMe->name + " reveals ";
                 string list;
-                for (auto content = openMe->contents.begin(); content != openMe->contents.end(); ++content)
-                {
-                    if (list != "")
-                    {
+                for (auto content = openMe->contents.begin(); content != openMe->contents.end(); ++content) {
+                    if (list != "") {
                         list += ", ";
                         if (content == --openMe->contents.end())
                             list += "and ";
@@ -651,14 +528,10 @@ string ChatParser::Open(Player* p, Thing *openMe)
                 }
                 output += list + ".\n";
                 return output;
-            }
-            else
-            {
+            } else {
                 return "Opened.\n";
             }
-        }
-        else
-        {
+        } else {
             return "It is already open.\n";
         }
     } else {
@@ -666,8 +539,7 @@ string ChatParser::Open(Player* p, Thing *openMe)
     }
 }
 
-string ChatParser::Read(Player* p, Thing *readMe)
-{
+string ChatParser::Read(Player* p, Thing* readMe) {
     string output = "";
     if (readMe->isReadable) {
         if (!InventoryHasThing(p, readMe)) {
@@ -683,15 +555,14 @@ string ChatParser::Read(Player* p, Thing *readMe)
     return output;
 }
 
-bool ChatParser::Put(Player* p, string putMe, string fillMe)
-{
+bool ChatParser::Put(Player* p, string putMe, string fillMe) {
     auto* tempPut = p->inventory->GetItem(putMe);
     auto* tempFill = p->currentRoom->contents[fillMe];
 
-    if(tempFill->isContainer){
-            if(!tempFill->isOpen){
+    if (tempFill->isContainer){
+            if (!tempFill->isOpen){
                 tempFill->isOpen = true;
-                if(tempFill->capacity >= tempPut->size){
+                if (tempFill->capacity >= tempPut->size){
                     tempFill->contents[fillMe] = tempPut;
                     p->inventory->remove(putMe, 1);
                 }
@@ -703,15 +574,14 @@ bool ChatParser::Put(Player* p, string putMe, string fillMe)
     return true;
 }
 
-string ChatParser::Drink(Player* p, Thing *drinkMe)
-{
+string ChatParser::Drink(Player* p, Thing* drinkMe) {
     if (!drinkMe->isDrinkable) {
         return "I don't think the " + drinkMe->GetName() + " would agree with you.\n";
     } else {
         for (auto pair : *p->inventory->container) {
-            Thing *pairThing = pair.second.item;
+            Thing* pairThing = pair.second.item;
             for (auto innerPair : pairThing->contents) {
-                Thing *innerThing = innerPair.second;
+                Thing* innerThing = innerPair.second;
                 if (innerThing == drinkMe) {
                     if (!pairThing->isOpen) {
                         return "You'll have to open the " + pairThing->GetName() + " first.\n";
@@ -723,9 +593,9 @@ string ChatParser::Drink(Player* p, Thing *drinkMe)
             }
         }
         for (auto pair : p->currentRoom->contents) {
-            Thing *pairThing = pair.second;
+            Thing* pairThing = pair.second;
             for (auto innerPair : pairThing->contents) {
-                Thing *innerThing = innerPair.second;
+                Thing* innerThing = innerPair.second;
                 if (innerThing == drinkMe) {
                     return "You have to be holding the " + pairThing->GetName() + " first.\n";
                 }
@@ -735,8 +605,7 @@ string ChatParser::Drink(Player* p, Thing *drinkMe)
     return "";
 }
 
-string ChatParser::Turn(Player* p, Thing *turnMe, bool on)
-{
+string ChatParser::Turn(Player* p, Thing* turnMe, bool on) {
     if (turnMe->isToggleable) {
         if (on && turnMe->isOn) {
             return "It is already on.\n";
@@ -750,14 +619,11 @@ string ChatParser::Turn(Player* p, Thing *turnMe, bool on)
     return "";
 }
 
-bool ChatParser::Turn(Player* p, string turnMe)
-{
-
+bool ChatParser::Turn(Player* p, string turnMe) {
     return true;
 }
 
-string ChatParser::MoveObj(Player* p, Thing *moveMe)
-{
+string ChatParser::MoveObj(Player* p, Thing* moveMe) {
     if (InventoryHasThing(p, moveMe)) {
         return "You're not an accomplished enough juggler.\n";
     } else if (!moveMe->isMovable) {
@@ -774,26 +640,22 @@ string ChatParser::MoveObj(Player* p, Thing *moveMe)
     }
 }
 
-bool ChatParser::Attack(Player* p, string attackMe, string attackWithMe)
-{
-
+bool ChatParser::Attack(Player* p, string attackMe, string attackWithMe) {
     return true;
 }
 
-string ChatParser::Examine(Player* p, Thing *examineMe)
-{
+string ChatParser::Examine(Player* p, Thing* examineMe) {
     return examineMe->Look();
 }
 
-string ChatParser::Eat(Player* p, Thing *eatMe)
-{
+string ChatParser::Eat(Player* p, Thing* eatMe) {
     if (!eatMe->isEdible) {
         return "I don't think the " + eatMe->GetName() + " would agree with you.\n";
     } else {
         for (auto pair : *p->inventory->container) {
-            Thing *pairThing = pair.second.item;
+            Thing* pairThing = pair.second.item;
             for (auto innerPair : pairThing->contents) {
-                Thing *innerThing = innerPair.second;
+                Thing* innerThing = innerPair.second;
                 if (innerThing == eatMe) {
                     if (!pairThing->isOpen) {
                         return "You'll have to open the " + pairThing->GetName() + " first.\n";
@@ -808,8 +670,7 @@ string ChatParser::Eat(Player* p, Thing *eatMe)
     }
 }
 
-string ChatParser::Close(Player* p, Thing *closeMe)
-{
+string ChatParser::Close(Player* p, Thing* closeMe) {
     if (closeMe->isContainer) {
         if (closeMe->isOpen) {
             closeMe->isOpen = false;
@@ -822,64 +683,47 @@ string ChatParser::Close(Player* p, Thing *closeMe)
     }
 }
 
-bool ChatParser::Tie(string tieMe, string toMe)
-{
-
+bool ChatParser::Tie(string tieMe, string toMe) {
     return true;
 }
 
-bool ChatParser::Break(string breakMe, string withMe)
-{
-
+bool ChatParser::Break(string breakMe, string withMe) {
     return true;
 }
 
-string ChatParser::Jump()
-{
+string ChatParser::Jump() {
     return "Are you enjoying yourself?\n";
 }
 
-string ChatParser::Pray()
-{
+string ChatParser::Pray() {
     return "If you pray enough, your prayers may be answered.\n";
 }
 
-string ChatParser::Diagnose()
-{
+string ChatParser::Diagnose() {
     return "Lookin' good.\n";
 }
 
-string ChatParser::Shout()
-{
+string ChatParser::Shout() {
     return "Aaaarrrrgggghhhh!\n";
 }
 
-bool ChatParser::Destroy(string destroyMe)
-{
-
+bool ChatParser::Destroy(string destroyMe) {
     return true;
 }
 
-bool ChatParser::Swap(string swapMe, string withMe)
-{
-
+bool ChatParser::Swap(string swapMe, string withMe) {
     return true;
 }
 
-bool ChatParser::Save(string state)
-{
-
+bool ChatParser::Save(string state) {
     return true;
 }
 
-bool ChatParser::Restore(string state)
-{
-
+bool ChatParser::Restore(string state) {
     return true;
 }
 
-string ChatParser::In(Player *p, Thing *inMe)
-{
+string ChatParser::In(Player* p, Thing* inMe) {
     if (inMe->enter) {
         p->currentRoom = inMe->enter;
         return Look(p);
@@ -888,71 +732,75 @@ string ChatParser::In(Player *p, Thing *inMe)
     }
 }
 
-string ChatParser::ProcessCommand(string data, Player* p)
-{
+string ChatParser::ProcessCommand(string data, Player* p) {
     unique_lock<mutex> lk(cMutex);
-
-
     return Parse(data, p);
 }
 
+void ChatParser::SendStringToClient(SOCKET cSock, string message) {
+    send(cSock, message.c_str(), message.length(), 0);
+}
 
+Player* ChatParser::ReceivePlayerFromLogin(SOCKET cSock) {
+    Player* myPlayer = nullptr;
+    char receivedUsername[DEFAULT_BUFLEN] = {0};
 
-void ChatParser::ClientThread(SOCKET cSock, char* ip)
-{
+    while (!myPlayer) {
+        string sendString = "What is your username?\n> ";
+        SendStringToClient(cSock, sendString);
+        
+        int iResult = recv(cSock, receivedUsername, DEFAULT_BUFLEN, 0);
+        bool validResponse = iResult >= 0;
+
+        if (!validResponse) {
+            sendString = "Sorry, invalid response. Try again.\n";
+        } else if (RemoveSpaces(receivedUsername) == "") {
+            sendString = "You did not type anything.\n";
+        } else if ((myPlayer = game->GetPlayer(receivedUsername))) {
+            unique_lock<mutex> lk(cMutex);
+                
+            if (myPlayer->inUse) {
+                myPlayer = nullptr;
+                sendString = "That username is already being used.";
+            } else {
+                sendString = "Welcome " + string(receivedUsername) + "!\n";
+            }
+
+            lk.unlock();
+        } else {
+            myPlayer = game->CreatePlayer(receivedUsername);
+            sendString = "That username does not exist. Welcome " + string(receivedUsername) + "!\n";
+        }
+
+        sendString += "\n";
+        SendStringToClient(cSock, sendString);
+    }
+
+    return myPlayer;
+}
+
+void ChatParser::ClientThread(SOCKET cSock, char* ip) {
     int iResult = 0;
     char sendbuf[DEFAULT_BUFLEN] = {0};
     char recvbuf[DEFAULT_BUFLEN] = {0};
-    Player* myPlayer;
+    string sendString = "";
 
-    string sendString = "What is your username? ";
+    Player* myPlayer = ReceivePlayerFromLogin(cSock);
 
-    for(;;)
-    {
-        strcpy(sendbuf, sendString.c_str());
-        send( cSock, sendbuf, sizeof(sendbuf), 0 );
-
-        iResult = recv(cSock, recvbuf, DEFAULT_BUFLEN, 0);
-        printf("Bytes received: %d\n", iResult);
-
-        if(RemoveSpaces(recvbuf) == "")
-        {
-            sendString = "You did not type anything.";
-            continue;
-        }
-
-        if((myPlayer = game->GetPlayer((recvbuf))) == NULL)
-        {
-            myPlayer = game->CreatePlayer((recvbuf));
-            sendString = "That username does not exist. Welcome " + string(recvbuf) + "!\n";
-            break;
-        }
-        else
-        {
-            unique_lock<mutex> lk(cMutex);
-            if(myPlayer->inUse == true)
-            {
-                myPlayer->inUse = true;
-                sendString = "That username is already being used.";
-                continue;
-            }
-            else
-            {
-                sendString = "Welcome " + string(recvbuf) + "!\n";
-                break;
-            }
-            lk.unlock();
-        }
-    }
-
+    // Using braces so unique_lock automatically unlocks when out of scope
     {
         unique_lock<mutex> lk(cMutex);
-        myPlayer->currentRoom->players[myPlayer->name] = myPlayer;
+        // Get reference to room that this player was last in
+        auto currentRoom = myPlayer->currentRoom;
+
+        // Place player back in live room
+        currentRoom->players[ToLower(myPlayer->name)] = myPlayer;
     }
 
     sendString += ProcessCommand("look", myPlayer);
-    strcpy(sendbuf, sendString.c_str());
-    send( cSock, sendbuf, sizeof(sendbuf), 0 );
+    // strcpy(sendbuf, sendString.c_str());
+    // send( cSock, sendbuf, sizeof(sendbuf), 0 );
+    SendStringToClient(cSock, sendString);
 
     do {
         char recvbuf[DEFAULT_BUFLEN] = {0};
@@ -965,8 +813,9 @@ void ChatParser::ClientThread(SOCKET cSock, char* ip)
             printf("Bytes received: %d\n", iResult);
 
             strcpy(sendbuf, ProcessCommand(recvbuf, myPlayer).c_str());
-
             send( cSock, sendbuf, sizeof(sendbuf), 0 );
+
+            SendStringToClient(cSock, sendString);
         }
         else
         {
@@ -981,21 +830,19 @@ void ChatParser::ClientThread(SOCKET cSock, char* ip)
     } while (iResult > 0);
 }
 
-void ChatParser::LogOff(Player *p)
-{
+void ChatParser::LogOff(Player* p) {
     p->inUse = false;
     p->currentRoom->players.erase(p->name);
 }
 
 // https://stackoverflow.com/questions/28027937/cross-platform-sockets
-int ChatParser::StartServer()
-{
+int ChatParser::StartServer() {
     int iResult;
 
     SOCKET ListenSocket = INVALID_SOCKET;
     SOCKET ClientSocket = INVALID_SOCKET;
 
-    struct addrinfo *result = NULL;
+    struct addrinfo* result = NULL;
     struct addrinfo hints;
     struct sockaddr_storage Addr;
 
@@ -1062,16 +909,15 @@ int ChatParser::StartServer()
 
     // Accept a client socket
     // TODO: Do we ever get out of this?
-    for(;;)
-    {
+    for (;;) {
         ClientSocket = accept(ListenSocket, NULL, NULL);
-        if (ClientSocket != INVALID_SOCKET)
-        {
+        if (ClientSocket != INVALID_SOCKET) {
             printf("Client Found! ");
             send( ClientSocket, "sdas", iResult, 0 );
 
             getpeername(ClientSocket, (LPSOCKADDR)&Addr, (socklen_t*)&AddrLen);
             getnameinfo((LPSOCKADDR)&Addr, (socklen_t)AddrLen, AddrName, sizeof(AddrName), NULL, 0, NI_NUMERICHOST);
+            // TODO: AddrName is empty
             cout << "IP: " << AddrName << endl;
             threadList.push_back(thread(ClientThread, ClientSocket, AddrName) );
         }
@@ -1092,8 +938,7 @@ int ChatParser::StartServer()
     return 0;
 }
 
-int ChatParser::SocketInit()
-{
+int ChatParser::SocketInit() {
     #ifdef _WIN32
         WSADATA wsa_data;
         return WSAStartup(MAKEWORD(2,2), &wsa_data);
@@ -1102,8 +947,7 @@ int ChatParser::SocketInit()
     #endif
 }
 
-int ChatParser::SocketGetLastError()
-{
+int ChatParser::SocketGetLastError() {
     #ifdef _WIN32
         return WSAGetLastError();
     #else
@@ -1111,8 +955,7 @@ int ChatParser::SocketGetLastError()
     #endif
 }
 
-int ChatParser::SocketShutdown(SOCKET sock)
-{
+int ChatParser::SocketShutdown(SOCKET sock) {
     #ifdef _WIN32
         // int iResult = shutdown(sock, SD_BOTH);   // What is SD_BOTH, SD_SEND?
         return shutdown(sock, SD_SEND);
@@ -1121,8 +964,7 @@ int ChatParser::SocketShutdown(SOCKET sock)
     #endif
 }
 
-int ChatParser::SocketClose(SOCKET sock)
-{
+int ChatParser::SocketClose(SOCKET sock) {
     #ifdef _WIN32
         return closesocket(sock);
     #else
@@ -1130,8 +972,7 @@ int ChatParser::SocketClose(SOCKET sock)
     #endif
 }
 
-int ChatParser::SocketQuit()
-{
+int ChatParser::SocketQuit() {
     #ifdef _WIN32
         return WSACleanup();
     #else

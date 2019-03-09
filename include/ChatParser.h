@@ -54,6 +54,10 @@ class ChatParser
         static string Parse(string parseMe, Player* p);
         static Game *game;
         static string ProcessCommand(string data, Player* p);
+        static void SendStringToClient(SOCKET cSock, string message);
+        static string ReceiveResponse(SOCKET cSock);
+        static string ReceiveResponse(SOCKET cSock, string prompt);
+        static Player* ReceivePlayerFromLogin(SOCKET cSock);
         static void ClientThread(SOCKET cSock, char* ip);
         static int StartServer();
         static int SocketInit();
